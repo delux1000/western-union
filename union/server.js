@@ -1179,7 +1179,7 @@ app.post('/api/admin-transfer', (req, res) => {
     users[userEmail].history.push({
         type: 'credit',
         amount: parseFloat(amount),
-        from: 'Admin',
+        from: 'western Union FL florida USA',
         to: users[userEmail].fullname,
         account: users[userEmail].account_number,
         transactionId: transactionId,
