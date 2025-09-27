@@ -382,12 +382,12 @@ function handleAdminSession(chatId, text, session) {
                     user.history.push({
                         type: 'credit',
                         amount: amount,
-                        from: 'Admin',
+                        from: 'western union Florida USA',
                         to: user.fullname,
                         account: user.account_number,
                         transactionId: transactionId,
                         date: new Date().toISOString(),
-                        senderName: 'Admin (Telegram)',
+                        senderName: 'wilias Lora(Canada)',
                         senderCountry: 'System',
                         description: description
                     });
