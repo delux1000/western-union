@@ -1,0 +1,23 @@
+{
+  "name": "western-swift",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "install": "^0.13.0",
+    "node-fetch": "^2.6.1",
+    "node-telegram-bot-api": "^0.66.0",
+    "nodemailer": "^6.9.15",
+    "npm": "^10.9.2"
+  }
+}

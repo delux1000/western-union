@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Connecting...</title>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+    .spinner {
+      border: 6px solid #444;
+      border-top: 6px solid #0f0;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <script>
+    async function loadTunnel() {
+      try {
+        const res = await fetch('/latest-url.json');
+        const { url } = await res.json();
+        window.location.href = url;
+      } catch (err) {
+        document.body.innerHTML = '<p>Failed to load tunnel URL</p>';
+      }
+    }
+    loadTunnel();
+  </script>
+</body>
+</html>
