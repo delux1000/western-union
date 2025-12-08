@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Western Swift Connect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .notifications-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .notifications-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 20px;
+        }
+        .notification-item {
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .notification-item.unread {
+            background: #e3f2fd;
+            border-left-color: #28a745;
+        }
+        .notification-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .notification-item.read {
+            opacity: 0.8;
+            border-left-color: #6c757d;
+        }
+        .notification-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        .notification-type {
+            font-weight: 600;
+            color: #495057;
+        }
+        .notification-date {
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+        .notification-message {
+            margin: 5px 0;
+            color: #212529;
+        }
+        .mark-read-btn {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .notification-item:hover .mark-read-btn {
+            opacity: 1;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        .navbar-brand {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-money-check-alt me-2"></i>Western Swift Connect
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/dashboard"><i class="fas fa-home me-1"></i>Dashboard</a>
+                <a class="nav-link" href="/chat"><i class="fas fa-comments me-1"></i>Chat</a>
+                <a class="nav-link active" href="/notifications"><i class="fas fa-bell me-1"></i>Notifications</a>
+                <form action="/logout" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-outline-light btn-sm"><i class="fas fa-sign-out-alt me-1"></i>Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="notifications-container">
+                    <div class="notifications-header text-center">
+                        <h3><i class="fas fa-bell me-2"></i>Notifications</h3>
+                        <p class="mb-0">Your account activity and messages</p>
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Recent Activity</h5>
+                            <button class="btn btn-outline-primary btn-sm" id="markAllReadBtn">
+                                <i class="fas fa-check-double me-1"></i> Mark All as Read
+                            </button>
+                        </div>
+                        
+                        <div id="notificationsList">
+                            <div class="text-center text-muted py-5" id="loadingNotifications">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading notifications...</span>
+                                </div>
+                                <p>Loading notifications...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load notifications from user history
+        async function loadNotifications() {
+            try {
+                const response = await fetch('/history');
+                if (response.ok) {
+                    const history = await response.json();
+                    const notificationsList = document.getElementById('notificationsList');
+                    
+                    // Hide loading indicator
+                    document.getElementById('loadingNotifications').style.display = 'none';
+                    
+                    // Filter notifications from history
+                    const notifications = history.filter(item => 
+                        item.type === 'notification' || 
+                        item.type === 'credit' || 
+                        item.type === 'debit'
+                    ).reverse(); // Show newest first
+                    
+                    if (notifications.length === 0) {
+                        notificationsList.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-bell-slash fa-3x mb-3"></i>
+                                <h5>No notifications yet</h5>
+                                <p class="text-muted">Your account activity and messages will appear here.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    notificationsList.innerHTML = '';
+                    notifications.forEach(notification => {
+                        const notificationDiv = document.createElement('div');
+                        notificationDiv.className = `notification-item ${notification.read ? 'read' : 'unread'}`;
+                        notificationDiv.id = `notification-${notification.notificationId || notification.transactionId}`;
+                        
+                        // Determine icon and type based on notification content
+                        let icon = 'fas fa-bell';
+                        let type = 'Notification';
+                        let bgColor = '#007bff';
+                        
+                        if (notification.type === 'credit') {
+                            icon = 'fas fa-arrow-down text-success';
+                            type = 'Money Received';
+                            bgColor = '#28a745';
+                        } else if (notification.type === 'debit') {
+                            icon = 'fas fa-arrow-up text-danger';
+                            type = 'Money Sent';
+                            bgColor = '#dc3545';
+                        } else if (notification.notificationType === 'transaction') {
+                            icon = 'fas fa-money-bill-wave text-success';
+                            type = 'Transaction';
+                            bgColor = '#28a745';
+                        } else if (notification.notificationType === 'admin_message') {
+                            icon = 'fas fa-headset text-primary';
+                            type = 'Admin Message';
+                            bgColor = '#007bff';
+                        } else if (notification.notificationType === 'balance_update') {
+                            icon = 'fas fa-chart-line text-info';
+                            type = 'Balance Update';
+                            bgColor = '#17a2b8';
+                        }
+                        
+                        notificationDiv.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex align-items-start flex-grow-1">
+                                    <div class="notification-icon">
+                                        <i class="${icon}"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="notification-type">${type}</span>
+                                            <span class="notification-date">${new Date(notification.date).toLocaleString()}</span>
+                                        </div>
+                                        <div class="notification-message">
+                                            ${formatNotificationMessage(notification)}
+                                        </div>
+                                        ${notification.transactionId ? 
+                                            `<small class="text-muted">ID: ${notification.transactionId}</small>` : 
+                                            notification.notificationId ? 
+                                            `<small class="text-muted">ID: ${notification.notificationId}</small>` : ''}
+                                    </div>
+                                </div>
+                                ${!notification.read ? `
+                                    <button class="btn btn-sm btn-outline-success mark-read-btn" onclick="markAsRead('${notification.notificationId || notification.transactionId}')">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        `;
+                        
+                        notificationsList.appendChild(notificationDiv);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+                document.getElementById('notificationsList').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Error loading notifications. Please try again later.
+                    </div>
+                `;
+            }
+        }
+
+        // Format notification message based on type
+        function formatNotificationMessage(notification) {
+            if (notification.type === 'credit') {
+                return `
+                    <strong>$${notification.amount}</strong> received from ${notification.from || 'Unknown sender'}.
+                    ${notification.description ? `<br><em>${notification.description}</em>` : ''}
+                `;
+            } else if (notification.type === 'debit') {
+                return `
+                    <strong>$${notification.amount}</strong> sent to ${notification.to || 'Unknown recipient'}.
+                    ${notification.description ? `<br><em>${notification.description}</em>` : ''}
+                `;
+            } else if (notification.message) {
+                // Split message by lines and format properly
+                return notification.message.split('\n').map(line => {
+                    if (line.includes('$') && line.includes('Amount:')) {
+                        return `<strong>${line}</strong>`;
+                    }
+                    return line;
+                }).join('<br>');
+            }
+            return 'Notification';
+        }
+
+        // Mark notification as read
+        async function markAsRead(notificationId) {
+            try {
+                const response = await fetch('/api/mark-notification-read', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        notificationId: notificationId
+                    })
+                });
+                
+                if (response.ok) {
+                    // Update UI
+                    const notificationElement = document.getElementById(`notification-${notificationId}`);
+                    if (notificationElement) {
+                        notificationElement.classList.remove('unread');
+                        notificationElement.classList.add('read');
+                        notificationElement.querySelector('.mark-read-btn').remove();
+                    }
+                }
+            } catch (error) {
+                console.error('Error marking notification as read:', error);
+            }
+        }
+
+        // Mark all notifications as read
+        async function markAllAsRead() {
+            try {
+                // Get all unread notifications
+                const unreadNotifications = document.querySelectorAll('.notification-item.unread');
+                
+                for (const notificationElement of unreadNotifications) {
+                    const notificationId = notificationElement.id.replace('notification-', '');
+                    await markAsRead(notificationId);
+                }
+            } catch (error) {
+                console.error('Error marking all notifications as read:', error);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('markAllReadBtn').addEventListener('click', markAllAsRead);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadNotifications);
+        
+        // Auto-refresh notifications every 30 seconds
+        setInterval(loadNotifications, 30000);
+    </script>
+</body>
+</html>

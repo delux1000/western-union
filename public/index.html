@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Western Union Online Wallet</title>
+    <style>
+        :root {
+            --primary-blue: #0033A0;
+            --secondary-gold: #FFD700;
+            --dark-blue: #002366;
+            --light-blue: #E6F0FF;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #333333;
+            --medium-gray: #666666;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: var(--light-gray);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: var(--white);
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        header p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--secondary-gold);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-gold);
+            color: var(--primary-blue);
+        }
+        
+        .btn-primary:hover {
+            background-color: #e5c100;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .content-section {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            color: var(--primary-blue);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary-gold);
+            border-radius: 2px;
+        }
+        
+        .about-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--medium-gray);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .testimonial-card {
+            background-color: var(--light-blue);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: var(--dark-gray);
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .team-section {
+            text-align: center;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .team-member {
+            text-align: center;
+        }
+        
+        .member-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 4px solid var(--secondary-gold);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .member-name {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .member-role {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+        
+        /* New Advertisement Section */
+        .advertisement-section {
+            margin: 60px 0;
+        }
+        
+        .ad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .ad-card {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+            color: var(--white);
+        }
+        
+        .ad-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .ad-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .ad-content {
+            padding: 25px;
+        }
+        
+        .ad-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary-gold);
+        }
+        
+        .ad-description {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .ad-features {
+            list-style-type: none;
+        }
+        
+        .ad-features li {
+            margin-bottom: 8px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .ad-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary-gold);
+            font-weight: bold;
+        }
+        
+        /* New Banking Experts Section */
+        .experts-section {
+            margin: 60px 0;
+        }
+        
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .expert-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .expert-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .expert-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 4px solid var(--secondary-gold);
+        }
+        
+        .expert-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .expert-title {
+            color: var(--medium-gray);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .expert-bio {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+        
+        /* New Video Section */
+        .video-section {
+            margin: 60px 0;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .video-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .video-card:hover .video-thumbnail img {
+            transform: scale(1.05);
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 215, 0, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background-color: var(--secondary-gold);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .video-content {
+            padding: 20px;
+        }
+        
+        .video-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+        
+        .video-description {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .video-modal-content {
+            width: 90%;
+            max-width: 800px;
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .video-player {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+        
+        .chat-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: var(--white);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .chat-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        footer {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--secondary-gold);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 51, 160, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(0, 51, 160, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 51, 160, 0);
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .content-section {
+                padding: 30px 20px;
+            }
+            
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .member-photo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .ad-grid, .experts-grid, .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .video-player {
+                height: 300px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            header {
+                padding: 30px 0;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo">WU</div>
+            </div>
+            <h1>WESTERN UNION</h1>
+            <p>Your Trusted and Reliable Payment Gateway</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section class="cta-section">
+            <h2 style="color: var(--primary-blue); margin-bottom: 15px;">Get Started Today</h2>
+            <p style="color: var(--medium-gray); max-width: 600px; margin: 0 auto;">Join millions of satisfied customers who trust Western Union for secure and efficient financial transactions.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="window.location.href='register.html'">Create Account</button>
+                <button class="btn btn-secondary" onclick="window.location.href='/login.html'">Sign In</button>
+            </div>
+        </section>
+        
+        <!-- New Advertisement Section -->
+        <section class="content-section advertisement-section">
+            <h2 class="section-title">Why Choose Western Union?</h2>
+            <div class="ad-grid">
+                <div class="ad-card">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Global Transfers" class="ad-image">
+                    <div class="ad-content">
+                        <h3 class="ad-title">Global Money Transfers</h3>
+                        <p class="ad-description">Send money to over 200 countries and territories with competitive exchange rates.</p>
+                        <ul class="ad-features">
+                            <li>Fast transfers in minutes</li>
+                            <li>200+ countries supported</li>
+                            <li>Competitive exchange rates</li>
+                            <li>24/7 customer support</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="ad-card">
+                    <img src="https://images.unsplash.com/photo-1563013541-3f7e6752ee3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Secure Banking" class="ad-image">
+                    <div class="ad-content">
+                        <h3 class="ad-title">Bank-Level Security</h3>
+                        <p class="ad-description">Your funds are protected with industry-leading security measures.</p>
+                        <ul class="ad-features">
+                            <li>256-bit encryption</li>
+                            <li>Multi-factor authentication</li>
+                            <li>Fraud monitoring 24/7</li>
+                            <li>FDIC insured up to $250,000</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="ad-card">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Mobile Banking" class="ad-image">
+                    <div class="ad-content">
+                        <h3 class="ad-title">Mobile Banking Solutions</h3>
+                        <p class="ad-description">Manage your finances on the go with our award-winning mobile app.</p>
+                        <ul class="ad-features">
+                            <li>Send money with a few taps</li>
+                            <li>Track transactions in real-time</li>
+                            <li>Mobile check deposit</li>
+                            <li>Biometric login options</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="content-section">
+            <h2 class="section-title">About Us</h2>
+            <div class="about-content">
+                <p>Western Union is committed to providing top-notch, secure, and reliable payment services globally. Our mission is to empower individuals and businesses to manage their finances seamlessly through our innovative wallet solutions.</p>
+                <p style="margin-top: 15px;">We are the trusted payment gateway you can rely on for efficiency, security, and customer satisfaction. With decades of experience in global money transfer, we bring unparalleled expertise to digital financial services.</p>
+            </div>
+        </section>
+        
+        <!-- New Banking Experts Section -->
+        <section class="content-section experts-section">
+            <h2 class="section-title">Meet Our Banking Experts</h2>
+            <div class="experts-grid">
+                <div class="expert-card">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Financial Strategist" class="expert-photo">
+                    <h3 class="expert-name">Robert Chen</h3>
+                    <p class="expert-title">Chief Financial Strategist</p>
+                    <p class="expert-bio">20+ years in international finance. Specializes in cross-border transactions and currency risk management.</p>
+                </div>
+                
+                <div class="expert-card">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Security Director" class="expert-photo">
+                    <h3 class="expert-name">Sarah Johnson</h3>
+                    <p class="expert-title">Director of Security</p>
+                    <p class="expert-bio">Cybersecurity expert with 15 years experience protecting financial institutions from digital threats.</p>
+                </div>
+                
+                <div class="expert-card">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Technology Officer" class="expert-photo">
+                    <h3 class="expert-name">Michael Rodriguez</h3>
+                    <p class="expert-title">Chief Technology Officer</p>
+                    <p class="expert-bio">Leads our technology innovation with focus on blockchain and AI-driven financial solutions.</p>
+                </div>
+                
+                <div class="expert-card">
+                    <img src="https://images.unsplash.com/photo-1566492031773-4f4e44671d66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Compliance Director" class="expert-photo">
+                    <h3 class="expert-name">Jennifer Williams</h3>
+                    <p class="expert-title">Director of Compliance</p>
+                    <p class="expert-bio">Ensures all operations meet international regulatory standards across 200+ countries.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="content-section">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Western Union Online has transformed the way we handle payments. Their service is impeccable and reliable."</p>
+                    <p class="testimonial-author">- Alex T., Small Business Owner</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The best payment gateway we've used. Seamless transactions and great customer support!"</p>
+                    <p class="testimonial-author">- Jamie L., Freelancer</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Outstanding service with great features. Highly recommended for any business!"</p>
+                    <p class="testimonial-author">- Taylor S., E-commerce Manager</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- New Video Section -->
+        <section class="content-section video-section">
+            <h2 class="section-title">See Western Union in Action</h2>
+            <div class="video-grid">
+                <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/VIDEO_ID_1')">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="How to Send Money">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">How to Send Money in 3 Easy Steps</h3>
+                        <p class="video-description">Learn how to quickly and securely send money to friends and family worldwide.</p>
+                    </div>
+                </div>
+                
+                <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/VIDEO_ID_2')">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Security Features">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">Our Security Features Explained</h3>
+                        <p class="video-description">Discover how we protect your transactions with advanced security measures.</p>
+                    </div>
+                </div>
+                
+                <div class="video-card" onclick="openVideo('https://www.youtube.com/embed/VIDEO_ID_3')">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1563013541-3f7e6752ee3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Mobile App Tour">
+                        <div class="play-button">▶</div>
+                    </div>
+                    <div class="video-content">
+                        <h3 class="video-title">Mobile App Tour & Features</h3>
+                        <p class="video-description">Take a tour of our mobile app and learn about all its powerful features.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="content-section team-section">
+            <h2 class="section-title">Our Team</h2>
+            <p style="color: var(--medium-gray); max-width: 700px; margin: 0 auto 30px;">Meet the dedicated professionals who work tirelessly to ensure your financial transactions are secure, fast, and reliable.</p>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://www.w3schools.com/w3images/team1.jpg" alt="Financial Advisor" class="member-photo">
+                    <h3 class="member-name">Michael Johnson</h3>
+                    <p class="member-role">Financial Advisor</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://www.w3schools.com/w3images/team2.jpg" alt="Customer Support Manager" class="member-photo">
+                    <h3 class="member-name">Sarah Williams</h3>
+                    <p class="member-role">Customer Support Manager</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://www.w3schools.com/w3images/team3.jpg" alt="Security Specialist" class="member-photo">
+                    <h3 class="member-name">David Chen</h3>
+                    <p class="member-role">Security Specialist</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://www.w3schools.com/w3images/team4.jpg" alt="Payment Solutions Expert" class="member-photo">
+                    <h3 class="member-name">Emily Rodriguez</h3>
+                    <p class="member-role">Payment Solutions Expert</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Video Modal -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+            <button class="close-modal" onclick="closeVideo()">×</button>
+            <iframe id="videoPlayer" class="video-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+    
+    <div class="chat-icon" onclick="window.location.href='mailto westernuniononlinebankin@yahoo.com">
+        💬
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Security</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Help Center</a>
+            </div>
+            <p class="copyright">&copy; 2024 Western Union. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function openVideo(videoUrl) {
+            document.getElementById('videoPlayer').src = videoUrl;
+            document.getElementById('videoModal').style.display = 'flex';
+        }
+        
+        function closeVideo() {
+            document.getElementById('videoPlayer').src = '';
+            document.getElementById('videoModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside the video
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>
