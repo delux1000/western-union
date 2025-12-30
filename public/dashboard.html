@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dashboard - Western Union</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0033A0;
+            --secondary-gold: #FFD700;
+            --dark-blue: #002366;
+            --light-blue: #E6F0FF;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #333333;
+            --medium-gray: #666666;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --notification-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: linear-gradient(rgba(0, 33, 102, 0.85), rgba(0, 33, 102, 0.9)), 
+                        url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 20px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+        
+        .header-text h1 {
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .header-text p {
+            color: var(--medium-gray);
+            font-size: 1rem;
+        }
+        
+        .user-info {
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-info p {
+            margin-bottom: 5px;
+            color: var(--dark-gray);
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-icon:hover {
+            background-color: var(--light-blue);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--notification-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .account-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .balance-card, .account-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            position: relative;
+        }
+        
+        .balance-card {
+            border-left: 5px solid var(--secondary-gold);
+        }
+        
+        .account-card {
+            border-left: 5px solid var(--primary-blue);
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            color: var(--medium-gray);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .balance-hidden {
+            filter: blur(6px);
+            user-select: none;
+        }
+        
+        .balance-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--light-gray);
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .balance-toggle:hover {
+            background: var(--medium-gray);
+            color: var(--white);
+        }
+        
+        .account-number {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary-blue);
+        }
+        
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+        
+        .action-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+        
+        .action-description {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--secondary-gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-content {
+            background-color: var(--white);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: popupFadeIn 0.3s ease-out;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .popup-title {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .close-popup {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--medium-gray);
+            transition: color 0.3s ease;
+        }
+        
+        .close-popup:hover {
+            color: var(--dark-gray);
+        }
+        
+        .popup-body {
+            margin-bottom: 25px;
+        }
+        
+        .popup-body p {
+            margin-bottom: 15px;
+            color: var(--dark-gray);
+        }
+        
+        .popup-body ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .popup-body li {
+            margin-bottom: 10px;
+        }
+        
+        .crypto-info {
+            background-color: var(--light-blue);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .crypto-info p {
+            margin-bottom: 8px;
+            font-family: monospace;
+        }
+        
+        .popup-footer {
+            text-align: right;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+        
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes bellRing {
+            0% { transform: rotate(0); }
+            25% { transform: rotate(15deg); }
+            50% { transform: rotate(-15deg); }
+            75% { transform: rotate(10deg); }
+            100% { transform: rotate(0); }
+        }
+        
+        .bell-ring {
+            animation: bellRing 0.5s ease-in-out;
+        }
+        
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .user-info {
+                text-align: center;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .account-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .balance-amount {
+                font-size: 2rem;
+            }
+            
+            .account-number {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-card {
+                padding: 20px;
+            }
+            
+            .popup-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <div class="logo-section">
+                <div class="logo-icon">WU</div>
+                <div class="header-text">
+                    <h1>Western Union Dashboard</h1>
+                    <p>Your Trusted Payment Gateway</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="notification-icon" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationCount">0</span>
+                </div>
+                <div>
+                    <p>Welcome back,</p>
+                    <p class="user-name" id="UserFullName">Loading...</p>
+                </div>
+            </div>
+        </header>
+        
+        <div class="account-overview">
+            <div class="balance-card">
+                <button class="balance-toggle" id="balanceToggle">
+                    <span id="toggleIcon">👁️</span>
+                    <span id="toggleText">Hide</span>
+                </button>
+                <div class="card-title">Account Balance</div>
+                <div class="balance-amount" id="accountBalance">$0.00</div>
+                <p>Available for transactions</p>
+            </div>
+            <div class="account-card">
+                <div class="card-title">Account Number</div>
+                <div class="account-number" id="accountNumber">Loading...</div>
+                <p>Your unique account identifier</p>
+            </div>
+        </div>
+        
+        <div class="actions-grid">
+            <div class="action-card" onclick="window.location.href='transfer.html'">
+                <div class="action-icon">💳</div>
+                <div class="action-title">Withdraw Funds</div>
+                <div class="action-description">Transfer money to your bank account or other recipients</div>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='deposit.html'">
+                <div class="action-icon">💰</div>
+                <div class="action-title">Add Funds</div>
+                <div class="action-description">Deposit money to your Western Union account</div>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='access.html'">
+                <div class="action-icon">₿</div>
+                <div class="action-title">Withdraw to Crypto</div>
+                <div class="action-description">Withdraw funds to cryptocurrency wallet</div>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='history.html'">
+                <div class="action-icon">📊</div>
+                <div class="action-title">Transaction History</div>
+                <div class="action-description">View your past transactions and statements</div>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='notifications.html'">
+                <div class="action-icon">🔔</div>
+                <div class="action-title">Notifications</div>
+                <div class="action-description">View your account notifications</div>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='chat.html'">
+                <div class="action-icon">💬</div>
+                <div class="action-title">Customer Support</div>
+                <div class="action-description">Chat with our support team for assistance</div>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='logout.html'">
+                <div class="action-icon">🚪</div>
+                <div class="action-title">Logout</div>
+                <div class="action-description">Securely sign out of your account</div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Security</a>
+                    <a href="#">Contact Us</a>
+                </div>
+                <p class="copyright">&copy; 2024 Western Union. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Add Funds Popup -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">Add Funds Instructions</h2>
+                <button class="close-popup" onclick="hidePopup()">×</button>
+            </div>
+            <div class="popup-body">
+                <p>To add funds to your account, please follow these steps:</p>
+                <ol>
+                    <li>Deposit funds to the virtual Bitcoin address displayed below for local transfers.</li>
+                    <li>For international transfers, use the Western Union account number provided below.</li>
+                    <li>Ensure the amount is correct.</li>
+                    <li>Click 'Confirm' to update your balance.</li>
+                </ol>
+                
+                <div class="crypto-info">
+                    <p><strong>Bitcoin address:</strong> bc1qn6f9p5ehwwdvskclvd7483aw80e0qs3ahlt45n</p>
+                    <p><strong>Platform:</strong> Trust Wallet</p>
+                    <p><strong>Currency:</strong> Bitcoin</p>
+                    <p><strong>Western Union Account Number:</strong> (Use this for international funds)</p>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn" onclick="hidePopup()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let balanceVisible = true;
+        let notifications = [];
+        
+        // Toggle balance visibility
+        function toggleBalance() {
+            const balanceElement = document.getElementById('accountBalance');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const toggleText = document.getElementById('toggleText');
+            
+            if (balanceVisible) {
+                balanceElement.classList.add('balance-hidden');
+                toggleIcon.textContent = '🙈';
+                toggleText.textContent = 'Show';
+                balanceVisible = false;
+            } else {
+                balanceElement.classList.remove('balance-hidden');
+                toggleIcon.textContent = '👁️';
+                toggleText.textContent = 'Hide';
+                balanceVisible = true;
+            }
+        }
+        
+        // Show/hide popups
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+        
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+        
+        // Fetch user data
+        function fetchUserData() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('UserFullName').textContent = data.fullname;
+                    document.getElementById('accountNumber').textContent = data.account_number;
+                    document.getElementById('accountBalance').textContent = '$' + data.balance.toLocaleString();
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
+        }
+        
+        // Fetch notifications from transaction history
+        function fetchNotifications() {
+            fetch('/history')
+                .then(response => response.json())
+                .then(transactions => {
+                    notifications = transactions.map(transaction => {
+                        return {
+                            id: transaction.transactionId,
+                            title: transaction.type === 'credit' ? 'Funds Received' : 'Transfer Sent',
+                            message: `${transaction.type === 'credit' ? 'From' : 'To'}: ${transaction.type === 'credit' ? (transaction.from || 'Admin') : transaction.to}`,
+                            amount: `$${transaction.amount}`,
+                            date: new Date(transaction.date),
+                            read: false,
+                            type: transaction.type
+                        };
+                    });
+                    
+                    // Sort by date (newest first)
+                    notifications.sort((a, b) => b.date - a.date);
+                    
+                    updateNotificationBadge();
+                })
+                .catch(error => {
+                    console.error('Error fetching notifications:', error);
+                });
+        }
+        
+        // Update notification badge count
+        function updateNotificationBadge() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            const badge = document.getElementById('notificationCount');
+            badge.textContent = unreadCount;
+            
+            // Add/remove animation based on unread count
+            const bell = document.getElementById('notificationBell');
+            if (unreadCount > 0) {
+                bell.classList.add('bell-ring');
+                setTimeout(() => {
+                    bell.classList.remove('bell-ring');
+                }, 500);
+            }
+        }
+        
+        // Initialize the dashboard
+        window.onload = function() {
+            fetchUserData();
+            fetchNotifications();
+            
+            // Set up event listeners
+            document.getElementById('balanceToggle').addEventListener('click', toggleBalance);
+            document.getElementById('notificationBell').addEventListener('click', function() {
+                window.location.href = 'notifications.html';
+            });
+            
+            // Close popups when clicking outside
+            document.getElementById('popup').addEventListener('click', function(e) {
+                if (e.target === this) hidePopup();
+            });
+            
+            // Refresh notifications every 30 seconds
+            setInterval(fetchNotifications, 30000);
+        };
+    </script>
+</body>
+</html>
