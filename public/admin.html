@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WU Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b0f1a;
+  color: white;
+}
+
+/* LOGIN */
+#loginBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+}
+
+input {
+  padding: 12px;
+  margin: 10px;
+  width: 250px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background: #2962ff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* DASHBOARD */
+#dashboard {
+  display: none;
+  padding: 20px;
+}
+
+.card {
+  background: #111827;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+.actions button {
+  margin: 3px;
+  font-size: 12px;
+}
+
+.search {
+  width: 100%;
+  padding: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2>👑 Admin Login</h2>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <h1>👑 Admin Dashboard</h1>
+
+  <button onclick="logout()">Logout</button>
+
+  <input id="search" class="search" placeholder="Search users..." onkeyup="filterUsers()">
+
+  <div id="users"></div>
+</div>
+
+<script>
+let allUsers = [];
+
+/* LOGIN */
+async function login() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  const res = await fetch('/login', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await res.json();
+
+  if (data.success && data.isAdmin) {
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadUsers();
+  } else {
+    alert(data.message || "Login failed");
+  }
+}
+
+/* LOGOUT */
+async function logout() {
+  await fetch('/logout', { method: 'POST' });
+  location.reload();
+}
+
+/* LOAD USERS */
+async function loadUsers() {
+  const res = await fetch('/api/admin/users');
+  const data = await res.json();
+  allUsers = data;
+  displayUsers(data);
+}
+
+/* DISPLAY */
+function displayUsers(users) {
+  const container = document.getElementById('users');
+  container.innerHTML = '';
+
+  users.forEach(user => {
+    container.innerHTML += `
+      <div class="card">
+        <h3>${user.fullname}</h3>
+        <p>Email: ${user.email}</p>
+        <p>Account: ${user.account_number}</p>
+        <p>Balance: $${user.balance}</p>
+        <p>Status: ${user.active ? '🟢 Active' : '🔴 Disabled'}</p>
+
+        <div class="actions">
+          <button onclick="credit('${user.email}')">💰 Credit</button>
+          <button onclick="debit('${user.email}')">💸 Debit</button>
+          <button onclick="toggle('${user.email}')">🔄 Toggle</button>
+          <button onclick="changePass('${user.email}')">🔑 Password</button>
+          <button onclick="message('${user.email}')">📩 Message</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* SEARCH */
+function filterUsers() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = allUsers.filter(u =>
+    u.fullname.toLowerCase().includes(q) ||
+    u.email.toLowerCase().includes(q) ||
+    u.account_number.includes(q)
+  );
+  displayUsers(filtered);
+}
+
+/* ACTIONS */
+async function credit(email) {
+  const amount = prompt("Enter amount:");
+  if (!amount) return;
+
+  await fetch('/api/admin/credit', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ userEmail: email, amount })
+  });
+
+  alert("Credited!");
+  loadUsers();
+}
+
+async function debit(email) {
+  const amount = prompt("Enter amount:");
+  if (!amount) return;
+
+  await fetch('/api/admin/debit', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ userEmail: email, amount })
+  });
+
+  alert("Debited!");
+  loadUsers();
+}
+
+async function toggle(email) {
+  await fetch('/api/admin/toggle-status', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ userEmail: email })
+  });
+
+  alert("Status Updated!");
+  loadUsers();
+}
+
+async function changePass(email) {
+  const newPassword = prompt("New Password:");
+  if (!newPassword) return;
+
+  await fetch('/api/admin/change-password', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ userEmail: email, newPassword })
+  });
+
+  alert("Password Changed!");
+}
+
+async function message(email) {
+  const msg = prompt("Enter message:");
+  if (!msg) return;
+
+  await fetch('/api/admin/send-message', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ userEmail: email, message: msg })
+  });
+
+  alert("Message Sent!");
+}
+</script>
+
+</body>
+</html>
