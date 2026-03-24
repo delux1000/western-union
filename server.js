@@ -6,7 +6,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const fetch = require('node-fetch');
 
 const app = express();
-const port = 3000;
+const port = 1000;
 
 // JSONBin Configuration
 const JSONBIN_API_KEY = '$2a$10$nCBLclxfTfVHOJVQH1rRSOq.M/Ds19fpLw1sEX7k9IREVmxidVeBS';
