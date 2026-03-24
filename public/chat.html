@@ -2,647 +2,476 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Western Swift Connect - Customer Support</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Live Chat | Western Union Support</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230033A0'/><text x='50' y='70' font-size='50' text-anchor='middle' fill='%23FFD700' font-weight='bold'>WU</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #001a3a 0%, #002b5c 100%);
             min-height: 100vh;
-            padding: 20px;
             display: flex;
-            gap: 20px;
+            flex-direction: column;
         }
-
-        .main-container {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            max-width: 1400px;
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 15px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1280px;
             margin: 0 auto;
-        }
-
-        .chat-section {
-            flex: 3;
-        }
-
-        .notifications-section {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .chat-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
-            height: calc(100vh - 100px);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .notifications-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
-            height: calc(100vh - 100px);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .notifications-header {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .chat-header h1, .notifications-header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .chat-header p, .notifications-header p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: #f8f9fa;
-        }
-
-        .notifications-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: #f8f9fa;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message.admin {
-            justify-content: flex-start;
-        }
-
-        .message-bubble {
-            max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            position: relative;
-            word-wrap: break-word;
-        }
-
-        .user .message-bubble {
-            background: #007bff;
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .admin .message-bubble {
-            background: #e9ecef;
-            color: #333;
-            border-bottom-left-radius: 4px;
-        }
-
-        .message-time {
-            font-size: 11px;
-            opacity: 0.7;
-            margin-top: 5px;
-        }
-
-        .message-sender {
-            font-weight: bold;
-            font-size: 12px;
-            margin-bottom: 3px;
-        }
-
-        .chat-input {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .chat-input input:focus {
-            border-color: #007bff;
-        }
-
-        .chat-input button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .chat-input button:hover {
-            background: #0056b3;
-        }
-
-        .chat-input button:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
-
-        .back-button {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 15px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .status-online {
-            background: #28a745;
-        }
-
-        .status-away {
-            background: #ffc107;
-        }
-
-        .typing-indicator {
-            padding: 10px;
-            font-style: italic;
-            color: #6c757d;
-            display: none;
-        }
-
-        .notification-item {
-            background: white;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .notification-item:hover {
-            transform: translateX(5px);
-        }
-
-        .notification-item.unread {
-            background: #e3f2fd;
-            border-left-color: #2196f3;
-        }
-
-        .notification-item.important {
-            border-left-color: #f44336;
-        }
-
-        .notification-title {
-            font-weight: bold;
-            margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-
-        .notification-badge {
-            background: #dc3545;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: inline-flex;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #0033A0, #002366);
+            border-radius: 16px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            margin-left: 5px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #FFD700;
         }
-
-        .notification-time {
-            font-size: 12px;
-            color: #666;
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: #0033A0; }
+        .nav-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #0033A0, #002366);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-
-        .notification-content {
-            font-size: 14px;
-            color: #555;
+        .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 51, 160, 0.3); }
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 24px; }
+        .chat-container {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1000px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-
-        .notification-category {
-            display: inline-block;
-            background: #e0e0e0;
-            padding: 2px 8px;
+        .chat-header {
+            background: linear-gradient(135deg, #0033A0, #002366);
+            padding: 20px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .chat-header-info { display: flex; align-items: center; gap: 15px; }
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            background: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #0033A0;
+        }
+        .chat-header-text h2 { color: white; font-size: 1.3rem; margin-bottom: 4px; }
+        .chat-header-text p { color: rgba(255, 255, 255, 0.8); font-size: 0.8rem; }
+        .status-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #10B981;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; transform: scale(1.2); } }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 24px; background: #F8FAFE; display: flex; flex-direction: column; gap: 16px; }
+        .message { display: flex; gap: 12px; max-width: 80%; animation: slideIn 0.3s ease; }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            background: #E2E8F0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .message.user .message-avatar { background: #FFD700; color: #0033A0; }
+        .message.support .message-avatar { background: #0033A0; color: white; }
+        .message-bubble {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .message.user .message-bubble { background: linear-gradient(135deg, #0033A0, #002366); color: white; }
+        .message-time { font-size: 0.7rem; color: #94A3B8; margin-top: 6px; display: block; }
+        .message.user .message-time { color: rgba(255, 255, 255, 0.7); }
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 20px;
+            width: fit-content;
+            margin-left: 24px;
+            margin-bottom: 8px;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #94A3B8;
+            border-radius: 50%;
+            animation: typingAnim 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingAnim { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-10px); } }
+        .chat-input-area { padding: 20px 24px; background: white; border-top: 1px solid #E2E8F0; display: flex; gap: 12px; }
+        .chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #E2E8F0;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        .chat-input:focus { outline: none; border-color: #FFD700; }
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #e5c100);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #0033A0;
+            transition: all 0.3s;
+        }
+        .send-btn:hover { transform: scale(1.05); }
+        .user-topic-info {
+            background: #f1f5f9;
             border-radius: 12px;
-            font-size: 12px;
-            margin-right: 5px;
+            padding: 12px 20px;
+            margin: 0 24px 16px 24px;
+            font-size: 0.75rem;
+            color: #475569;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            border: 1px solid #e2e8f0;
         }
-
-        .notification-category.system {
-            background: #ffebee;
-            color: #c62828;
+        .user-topic-info i { color: #FFD700; margin-right: 6px; }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #0033A0;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 8px;
         }
-
-        .notification-category.support {
-            background: #e3f2fd;
-            color: #1565c0;
+        .copy-btn:hover { color: #FFD700; }
+        .footer {
+            background: rgba(0, 26, 58, 0.95);
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
-
-        .notification-category.update {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        @media (max-width: 1024px) {
-            body {
-                flex-direction: column;
-            }
-            
-            .main-container {
-                flex-direction: column;
-            }
-            
-            .chat-section, .notifications-section {
-                width: 100%;
-            }
-            
-            .chat-container, .notifications-container {
-                height: 500px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .chat-messages, .notifications-list {
-                height: 300px;
-            }
-            
-            .message-bubble {
-                max-width: 85%;
-            }
-            
-            .chat-input {
-                flex-direction: column;
-            }
-            
-            .chat-input button {
-                width: 100%;
-            }
+        @media (max-width: 768px) {
+            .chat-container { height: 85vh; }
+            .message { max-width: 90%; }
+            .user-topic-info { margin: 0 16px 12px 16px; flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="chat-section">
-            <a href="/dashboard" class="back-button">← Back to Dashboard</a>
-            
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h1>💬 Customer Support</h1>
-                    <p><span class="status-indicator status-online"></span>Connected to Western Swift Connect Support Team</p>
-                    <p id="support-status">We're here to help you! Average response time: 5-10 minutes</p>
+    <div class="header">
+        <div class="header-content">
+            <a href="dashboard.html" class="logo" style="text-decoration: none;">
+                <div class="logo-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div>
+                    <div class="logo-text">WESTERN UNION</div>
+                    <div style="font-size: 0.7rem; color: #64748B;">Live Support Chat</div>
                 </div>
-                
-                <div class="chat-messages" id="messages-container">
-                    <div class="message admin">
-                        <div class="message-bubble">
-                            <div class="message-sender">🤵 Support Agent</div>
-                            Hello! Welcome to Western Swift Connect customer support. How can we assist you today?
-                            <div class="message-time">Just now</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="typing-indicator" id="typing-indicator">
-                    Support agent is typing...
-                </div>
-                
-                <div class="chat-input">
-                    <input type="text" id="message-input" placeholder="Type your message here..." maxlength="500">
-                    <button id="send-button">Send</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="notifications-section">
-            <div class="notifications-container">
-                <div class="notifications-header">
-                    <h1>🔔 Live Notifications</h1>
-                    <p><span class="status-indicator status-online"></span>Real-time updates and alerts</p>
-                    <p id="notifications-status">Active notifications will appear here</p>
-                </div>
-                
-                <div class="notifications-list" id="notifications-list">
-                    <!-- Notifications will be loaded here dynamically -->
-                </div>
+            </a>
+            <div class="nav-buttons">
+                <a href="dashboard.html" class="nav-btn"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="#" id="logoutBtn" class="nav-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
     </div>
+    
+    <main class="main-content">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar"><i class="fas fa-headset"></i></div>
+                    <div class="chat-header-text">
+                        <h2>Western Union Support</h2>
+                        <p>We're here to help 24/7</p>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    <span>Online • Usually replies in minutes</span>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message support">
+                    <div class="message-avatar"><i class="fas fa-headset"></i></div>
+                    <div class="message-bubble">
+                        <div class="message-text">👋 Hello! Welcome to Western Union Live Support.<br><br>I'm here to assist you with:<br>• Account inquiries<br>• Transaction support<br>• Deposit/withdrawal assistance<br>• Security questions<br><br>How can I help you today?</div>
+                        <span class="message-time" id="welcomeTime"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="typingIndicator" class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <span>Support is typing...</span>
+            </div>
+            
+            <div class="user-topic-info" id="userTopicDisplay">
+                <span><i class="fas fa-key"></i> Your Private Topic: <strong id="topicName">Loading...</strong>
+                    <button class="copy-btn" onclick="copyTopic()"><i class="fas fa-copy"></i> Copy</button>
+                </span>
+                <span><i class="fas fa-shield-alt"></i> End-to-End Encrypted</span>
+                <span><i class="fas fa-bell"></i> Real-time Notifications via ntfy</span>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="messageInput" class="chat-input" placeholder="Type your message here..." autocomplete="off">
+                <button id="sendBtn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>© 2026 Western Union Holdings, Inc. All Rights Reserved. | Secure Chat</p>
+    </footer>
 
     <script>
-        let refreshInterval;
-        let lastMessageCount = 0;
-        let notificationsRefreshInterval;
-
-        // DOM elements
-        const messagesContainer = document.getElementById('messages-container');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-        const typingIndicator = document.getElementById('typing-indicator');
-        const supportStatus = document.getElementById('support-status');
-        const notificationsList = document.getElementById('notifications-list');
-
-        // Check if user is logged in
-        async function checkAuth() {
+        let currentUser = null;
+        let userEmail = '';
+        let userTopic = '';
+        let messages = [];
+        let messageCheckInterval = null;
+        
+        // Get current user data
+        async function loadUserData() {
             try {
                 const response = await fetch('/data');
-                if (!response.ok) {
+                if (response.ok) {
+                    currentUser = await response.json();
+                    userEmail = currentUser.email;
+                    userTopic = currentUser.ntfy_topic;
+                    document.getElementById('topicName').textContent = userTopic;
+                    document.getElementById('welcomeTime').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    return true;
+                } else if (response.status === 401) {
                     window.location.href = '/login';
-                    return;
+                    return false;
                 }
-                return await response.json();
             } catch (error) {
-                console.error('Auth check failed:', error);
-                window.location.href = '/login';
+                console.error('Error loading user data:', error);
             }
+            return false;
         }
-
-        // Load messages
-        async function loadMessages() {
+        
+        // Load chat history
+        async function loadChatHistory() {
             try {
-                const response = await fetch('/fetch-messages');
-                if (!response.ok) throw new Error('Failed to fetch messages');
-                
-                const conversations = await response.json();
-                const userConversation = conversations.find(conv => 
-                    conv.participants.includes('westernswiftconnect@gmail.com')
-                );
-                
-                if (userConversation) {
-                    displayMessages(userConversation.messages);
+                const response = await fetch('/api/chat/messages');
+                if (response.ok) {
+                    const history = await response.json();
+                    const container = document.getElementById('chatMessages');
                     
-                    // Show notification if new messages
-                    const currentMessageCount = userConversation.messages.length;
-                    if (currentMessageCount > lastMessageCount && lastMessageCount > 0) {
-                        showNotification('New message from support!');
+                    // Clear welcome message if there's history
+                    if (history.length > 0) {
+                        container.innerHTML = '';
                     }
-                    lastMessageCount = currentMessageCount;
+                    
+                    history.forEach(msg => {
+                        addMessageToUI(msg.message, msg.senderEmail === userEmail, new Date(msg.timestamp), false);
+                    });
+                    
+                    return history;
                 }
             } catch (error) {
-                console.error('Error loading messages:', error);
+                console.error('Error loading chat history:', error);
+            }
+            return [];
+        }
+        
+        // Add message to UI
+        function addMessageToUI(text, isUser, timestamp, saveToStorage = true) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'support'}`;
+            const timeStr = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            div.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas ${isUser ? 'fa-user' : 'fa-headset'}"></i>
+                </div>
+                <div class="message-bubble">
+                    <div class="message-text">${escapeHtml(text)}</div>
+                    <span class="message-time">${timeStr}</span>
+                </div>
+            `;
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            
+            if (saveToStorage) {
+                messages.push({ text, isUser, timestamp });
             }
         }
-
-        // Load notifications
-        async function loadNotifications() {
-            try {
-                const response = await fetch('/history');
-                if (!response.ok) throw new Error('Failed to fetch notifications');
-                
-                const notifications = await response.json();
-                displayNotifications(notifications);
-            } catch (error) {
-                console.error('Error loading notifications:', error);
-                // Display placeholder if no notifications or error
-                notificationsList.innerHTML = `
-                    <div class="notification-item">
-                        <div class="notification-title">
-                            <span>Welcome to Notifications</span>
-                        </div>
-                        <div class="notification-content">
-                            Important updates and alerts will appear here in real-time.
-                        </div>
-                        <div class="notification-time">Just now</div>
-                    </div>
-                `;
-            }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
-
-        // Display messages
-        function displayMessages(messages) {
-            messagesContainer.innerHTML = '';
-            
-            messages.forEach(message => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = message.senderEmail === 'westernswiftconnect@gmail.com' ? 'message admin' : 'message user';
-                
-                const bubbleDiv = document.createElement('div');
-                bubbleDiv.className = 'message-bubble';
-                
-                const senderDiv = document.createElement('div');
-                senderDiv.className = 'message-sender';
-                senderDiv.textContent = message.senderEmail === 'westernswiftconnect@gmail.com' ? '🤵 Support Agent' : '👤 You';
-                
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'message-time';
-                timeDiv.textContent = formatTime(message.timestamp);
-                
-                bubbleDiv.appendChild(senderDiv);
-                bubbleDiv.appendChild(document.createTextNode(message.message));
-                bubbleDiv.appendChild(timeDiv);
-                
-                messageDiv.appendChild(bubbleDiv);
-                messagesContainer.appendChild(messageDiv);
-            });
-            
-            // Scroll to bottom
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        // Display notifications
-        function displayNotifications(notifications) {
-            notificationsList.innerHTML = '';
-            
-            if (notifications.length === 0) {
-                notificationsList.innerHTML = `
-                    <div class="notification-item">
-                        <div class="notification-content">
-                            No new notifications at this time.
-                        </div>
-                        <div class="notification-time">${new Date().toLocaleTimeString()}</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            notifications.forEach(notification => {
-                const notificationDiv = document.createElement('div');
-                notificationDiv.className = `notification-item ${notification.unread ? 'unread' : ''} ${notification.important ? 'important' : ''}`;
-                
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'notification-title';
-                
-                const categorySpan = document.createElement('span');
-                categorySpan.className = `notification-category ${notification.category || 'system'}`;
-                categorySpan.textContent = notification.category || 'System';
-                
-                const titleText = document.createElement('span');
-                titleText.textContent = notification.title;
-                
-                titleDiv.appendChild(categorySpan);
-                titleDiv.appendChild(titleText);
-                
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'notification-content';
-                contentDiv.textContent = notification.message;
-                
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'notification-time';
-                timeDiv.textContent = formatTime(notification.timestamp);
-                
-                notificationDiv.appendChild(titleDiv);
-                notificationDiv.appendChild(contentDiv);
-                notificationDiv.appendChild(timeDiv);
-                
-                notificationsList.appendChild(notificationDiv);
-            });
-        }
-
+        
         // Send message
         async function sendMessage() {
-            const message = messageInput.value.trim();
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
             if (!message) return;
             
-            sendButton.disabled = true;
-            sendButton.textContent = 'Sending...';
+            addMessageToUI(message, true, new Date(), true);
+            input.value = '';
             
             try {
-                const response = await fetch('/chat', {
+                const response = await fetch('/api/chat/send', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
                 });
                 
                 if (response.ok) {
-                    messageInput.value = '';
-                    loadMessages(); // Reload messages to show the new one
-                } else {
-                    throw new Error('Failed to send message');
+                    // Message sent successfully
                 }
             } catch (error) {
                 console.error('Error sending message:', error);
-                alert('Failed to send message. Please try again.');
-            } finally {
-                sendButton.disabled = false;
-                sendButton.textContent = 'Send';
             }
         }
-
-        // Format time
-        function formatTime(timestamp) {
-            const date = new Date(timestamp);
-            const now = new Date();
-            const diff = now - date;
-            
-            if (diff < 60000) return 'Just now';
-            if (diff < 3600000) return `${Math.floor(diff / 60000)} minutes ago`;
-            if (diff < 86400000) return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        }
-
-        // Show notification
-        function showNotification(message) {
-            if ('Notification' in window && Notification.permission === 'granted') {
-                new Notification('Western Swift Connect', {
-                    body: message,
-                    icon: '/favicon.ico'
-                });
-            }
-        }
-
-        // Request notification permission
-        function requestNotificationPermission() {
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission();
-            }
-        }
-
-        // Event listeners
-        sendButton.addEventListener('click', sendMessage);
         
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
+        // Check for new messages
+        async function checkNewMessages() {
+            try {
+                const response = await fetch('/api/chat/messages');
+                if (response.ok) {
+                    const history = await response.json();
+                    if (history.length > messages.length) {
+                        const newMessages = history.slice(messages.length);
+                        newMessages.forEach(msg => {
+                            if (msg.senderEmail !== userEmail) {
+                                addMessageToUI(msg.message, false, new Date(msg.timestamp), true);
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking messages:', error);
             }
-        });
-
-        // Initialize chat and notifications
-        async function initChat() {
-            const userData = await checkAuth();
-            if (!userData) return;
-            
-            // Update header with user info
-            supportStatus.innerHTML = `Chatting as: <strong>${userData.fullname}</strong>`;
-            
-            // Load messages and set up auto-refresh
-            await loadMessages();
-            refreshInterval = setInterval(loadMessages, 3000); // Refresh every 3 seconds
-            
-            // Load notifications and set up auto-refresh
-            await loadNotifications();
-            notificationsRefreshInterval = setInterval(loadNotifications, 5000); // Refresh every 5 seconds
-            
-            // Request notification permission
-            requestNotificationPermission();
         }
-
-        // Start the chat
-        initChat();
-
+        
+        // Copy topic to clipboard
+        function copyTopic() {
+            navigator.clipboard.writeText(userTopic).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+        
+        // Logout
+        async function logout() {
+            try {
+                await fetch('/logout', { method: 'POST' });
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = '/login';
+            }
+        }
+        
+        // Initialize chat
+        async function init() {
+            const loaded = await loadUserData();
+            if (!loaded) return;
+            
+            await loadChatHistory();
+            
+            // Setup event listeners
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+            
+            // Start polling for new messages every 3 seconds
+            messageCheckInterval = setInterval(checkNewMessages, 3000);
+            
+            console.log('💬 Chat initialized');
+            console.log(`🔒 Your private ntfy topic: ${userTopic}`);
+            console.log(`📱 Receive notifications at: https://ntfy.sh/${userTopic}`);
+        }
+        
         // Cleanup on page unload
         window.addEventListener('beforeunload', () => {
-            if (refreshInterval) {
-                clearInterval(refreshInterval);
-            }
-            if (notificationsRefreshInterval) {
-                clearInterval(notificationsRefreshInterval);
+            if (messageCheckInterval) {
+                clearInterval(messageCheckInterval);
             }
         });
+        
+        init();
     </script>
 </body>
 </html>
