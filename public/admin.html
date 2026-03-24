@@ -8,9 +8,10 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial;
-  background: #0b0f1a;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0b0f1a 0%, #1a1f2e 100%);
   color: white;
+  min-height: 100vh;
 }
 
 /* LOGIN */
@@ -20,50 +21,181 @@ body {
   justify-content: center;
   height: 100vh;
   align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#loginBox h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 input {
-  padding: 12px;
+  padding: 12px 20px;
   margin: 10px;
-  width: 250px;
-  border-radius: 5px;
+  width: 280px;
+  border-radius: 25px;
   border: none;
+  font-size: 16px;
+  background: rgba(255,255,255,0.9);
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  transform: scale(1.02);
+  background: white;
+  box-shadow: 0 0 15px rgba(102,126,234,0.5);
 }
 
 button {
-  padding: 12px;
+  padding: 12px 30px;
   border: none;
-  border-radius: 5px;
-  background: #2962ff;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  opacity: 0.8;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102,126,234,0.4);
 }
 
 /* DASHBOARD */
 #dashboard {
   display: none;
   padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+#dashboard h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .card {
-  background: #111827;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(102,126,234,0.3);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  border-color: rgba(102,126,234,0.8);
+}
+
+.card h3 {
+  margin: 0 0 10px 0;
+  color: #667eea;
+  font-size: 1.3rem;
+}
+
+.card p {
+  margin: 8px 0;
+  color: #e5e7eb;
 }
 
 .actions button {
-  margin: 3px;
+  margin: 5px;
   font-size: 12px;
+  padding: 8px 16px;
+  background: rgba(102,126,234,0.2);
+  border: 1px solid #667eea;
+}
+
+.actions button:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
 }
 
 .search {
   width: 100%;
-  padding: 12px;
+  max-width: 500px;
+  padding: 12px 20px;
+  margin: 20px 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(102,126,234,0.5);
+  color: white;
+}
+
+.search::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+#dashboard > button:first-of-type {
+  background: linear-gradient(135deg, #f56565 0%, #ed64a6 100%);
+  margin-left: 10px;
+}
+
+/* Topics Section */
+.topics-section {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(102,126,234,0.3);
+}
+
+.topics-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 8px;
+}
+
+.topics-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.topic-badge {
+  background: rgba(102,126,234,0.2);
+  border: 1px solid #667eea;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  font-family: monospace;
+  color: #a0aec0;
+  transition: all 0.2s ease;
+}
+
+.topic-badge:hover {
+  background: rgba(102,126,234,0.4);
+  transform: scale(1.05);
+}
+
+.no-topics {
+  color: #a0aec0;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    padding: 15px;
+  }
+  
+  .actions button {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+  
+  #dashboard h1 {
+    font-size: 1.5rem;
+  }
 }
 </style>
 </head>
@@ -134,6 +266,9 @@ function displayUsers(users) {
   container.innerHTML = '';
 
   users.forEach(user => {
+    // Get ntfy topics - assuming user has ntfy_topics array or similar
+    const ntfyTopics = user.ntfy_topics || user.ntfyTopics || user.topics || [];
+    
     container.innerHTML += `
       <div class="card">
         <h3>${user.fullname}</h3>
@@ -141,6 +276,16 @@ function displayUsers(users) {
         <p>Account: ${user.account_number}</p>
         <p>Balance: $${user.balance}</p>
         <p>Status: ${user.active ? '🟢 Active' : '🔴 Disabled'}</p>
+        
+        <div class="topics-section">
+          <div class="topics-title">📡 Ntfy Chat Topics:</div>
+          <div class="topics-list">
+            ${ntfyTopics.length > 0 
+              ? ntfyTopics.map(topic => `<span class="topic-badge">${escapeHtml(topic)}</span>`).join('')
+              : '<span class="no-topics">No topics subscribed</span>'
+            }
+          </div>
+        </div>
 
         <div class="actions">
           <button onclick="credit('${user.email}')">💰 Credit</button>
@@ -152,6 +297,13 @@ function displayUsers(users) {
       </div>
     `;
   });
+}
+
+/* Helper function to escape HTML */
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 /* SEARCH */
