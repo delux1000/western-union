@@ -236,7 +236,7 @@
             color: #0033A0;
         }
 
-        /* NTFY Topic Card */
+        /* NTFY Topic Card - Enhanced with full URL */
         .ntfy-topic-card {
             background: linear-gradient(135deg, #1E293B, #0F172A);
             border-radius: 28px;
@@ -255,6 +255,7 @@
             align-items: center;
             gap: 15px;
             flex-wrap: wrap;
+            flex: 2;
         }
 
         .ntfy-icon {
@@ -262,26 +263,44 @@
             color: #FFD700;
         }
 
+        .ntfy-text {
+            flex: 1;
+            min-width: 200px;
+        }
+
         .ntfy-text h4 {
             color: white;
             font-size: 0.9rem;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
-        .ntfy-topic-code {
-            background: rgba(255,255,255,0.1);
-            padding: 8px 16px;
+        .full-ntfy-url {
+            background: rgba(0,0,0,0.5);
+            padding: 10px 16px;
             border-radius: 40px;
-            font-family: monospace;
+            font-family: 'SF Mono', 'Fira Code', monospace;
             font-size: 0.85rem;
             color: #FFD700;
             word-break: break-all;
+            display: inline-block;
+            border-left: 3px solid #FFD700;
+            margin-top: 6px;
         }
 
-        .copy-topic-btn, .view-ntfy-btn {
+        .ntfy-topic-badge {
+            background: rgba(255,215,0,0.15);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #FFE484;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .copy-topic-btn, .open-chat-btn {
             background: rgba(255,215,0,0.2);
             border: none;
-            padding: 10px 20px;
+            padding: 10px 22px;
             border-radius: 40px;
             color: #FFD700;
             font-weight: 600;
@@ -290,10 +309,23 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.85rem;
         }
 
-        .copy-topic-btn:hover, .view-ntfy-btn:hover {
-            background: rgba(255,215,0,0.4);
+        .copy-topic-btn:hover, .open-chat-btn:hover {
+            background: rgba(255,215,0,0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .open-chat-btn {
+            background: #10B981;
+            color: white;
+            border: none;
+        }
+
+        .open-chat-btn:hover {
+            background: #059669;
             transform: translateY(-2px);
         }
 
@@ -339,7 +371,7 @@
             color: #5B6E8C;
         }
 
-        /* Live Chat Button */
+        /* Live Chat Button - Special style for ntfy chat */
         .live-chat-tile {
             background: linear-gradient(135deg, #10B981, #059669);
             color: white;
@@ -350,7 +382,7 @@
         }
 
         .live-chat-tile .action-desc {
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.85);
         }
 
         /* Modern footer */
@@ -404,7 +436,8 @@
             .user-section { justify-content: center; }
             .greeting { text-align: center; }
             .balance-figure { font-size: 2.2rem; }
-            .ntfy-topic-card { flex-direction: column; text-align: center; }
+            .ntfy-topic-card { flex-direction: column; text-align: center; align-items: stretch; }
+            .full-ntfy-url { font-size: 0.7rem; word-break: break-all; }
         }
     </style>
 </head>
@@ -455,23 +488,28 @@
         </div>
     </div>
 
-    <!-- NTFY Topic Display Card -->
+    <!-- NTFY Topic Card: Displays FULL ntfy URL with user topic (live chat ready) -->
     <div class="ntfy-topic-card" id="ntfyTopicCard">
         <div class="ntfy-info">
-            <div class="ntfy-icon"><i class="fas fa-bell"></i></div>
+            <div class="ntfy-icon"><i class="fas fa-comments"></i></div>
             <div class="ntfy-text">
-                <h4><i class="fas fa-key"></i> Your Private Notification Topic</h4>
-                <div class="ntfy-topic-code" id="ntfyTopicDisplay">loading...</div>
-                <small style="color: #94A3B8; font-size: 0.7rem;">Get real-time alerts on your phone via ntfy app</small>
+                <h4><i class="fas fa-headset"></i> Live Chat System powered by ntfy</h4>
+                <div id="fullNtfyUrlContainer" style="margin-top: 5px;">
+                    <span class="ntfy-topic-badge"><i class="fas fa-link"></i> YOUR CHAT ROOM URL</span>
+                    <div class="full-ntfy-url" id="ntfyFullUrlDisplay">loading...</div>
+                </div>
+                <small style="color: #94A3B8; font-size: 0.7rem; display: block; margin-top: 6px;">
+                    <i class="fas fa-info-circle"></i> Click "Open Live Chat" to connect with support & receive instant notifications. Real-time secure messaging.
+                </small>
             </div>
         </div>
-        <div style="display: flex; gap: 12px;">
-            <button class="copy-topic-btn" id="copyTopicBtn"><i class="fas fa-copy"></i> Copy Topic</button>
-            <button class="view-ntfy-btn" id="viewNtfyBtn"><i class="fas fa-external-link-alt"></i> View Live Feed</button>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="copy-topic-btn" id="copyFullUrlBtn"><i class="fas fa-copy"></i> Copy Chat URL</button>
+            <button class="open-chat-btn" id="openLiveChatBtn"><i class="fas fa-comment-dots"></i> Open Live Chat</button>
         </div>
     </div>
 
-    <!-- Action Grid (All services) -->
+    <!-- Action Grid (All services) - Live Chat now opens ntfy URL directly -->
     <div class="action-matrix" id="actionGrid">
         <div class="action-tile" data-action="withdraw">
             <div class="action-icon">💸</div>
@@ -498,10 +536,11 @@
             <div class="action-title">Alerts Center</div>
             <div class="action-desc">Account alerts & security</div>
         </div>
-        <div class="action-tile live-chat-tile" data-action="livechat">
+        <!-- Live Chat Tile: now triggers ntfy direct URL -->
+        <div class="action-tile live-chat-tile" data-action="livechat_ntfy">
             <div class="action-icon">💬🎧</div>
             <div class="action-title">Live Support Chat</div>
-            <div class="action-desc">Connect with agent instantly</div>
+            <div class="action-desc">Connect via ntfy secure messaging</div>
         </div>
         <div class="action-tile" data-action="logout">
             <div class="action-icon">🚪🔒</div>
@@ -524,7 +563,7 @@
 
 <script>
     // ============================================
-    // NTFY DASHBOARD NOTIFICATIONS
+    // NTFY DASHBOARD NOTIFICATIONS & LIVE CHAT SYSTEM
     // ============================================
     const DASHBOARD_NTFY_TOPIC = "wu_dashboard_secure_alerts";
     const DASHBOARD_NTFY_URL = `https://ntfy.sh/${DASHBOARD_NTFY_TOPIC}`;
@@ -561,7 +600,8 @@
     let currentUser = null;
     let balanceVisible = true;
     let notificationsArray = [];
-    let userNtfyTopic = '';
+    let userNtfyTopic = '';      // personal topic for chat & notifications
+    let fullNtfyChatUrl = '';
 
     // Fetch user data from server
     async function fetchUserData() {
@@ -578,38 +618,69 @@
                     ntfy_topic: userData.ntfy_topic
                 };
                 userNtfyTopic = userData.ntfy_topic;
+                fullNtfyChatUrl = `https://ntfy.sh/${userNtfyTopic}`;
                 
                 // Update UI
                 document.getElementById('displayFullName').innerText = currentUser.fullname;
                 document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
-                document.getElementById('ntfyTopicDisplay').innerText = userNtfyTopic;
+                updateNtfyUrlDisplay();
                 refreshBalanceDisplay();
                 
                 // Store in localStorage for session
                 localStorage.setItem('wu_current_user', JSON.stringify(currentUser));
                 localStorage.setItem('wu_current_user_email', currentUser.email);
                 
-                sendSecureLog('dashboard_data_loaded', { userEmail: currentUser.email });
+                sendSecureLog('dashboard_data_loaded', { userEmail: currentUser.email, ntfyTopic: userNtfyTopic });
                 return true;
             } else if (response.status === 401) {
-                // Not logged in, redirect to login
                 window.location.href = '/login';
                 return false;
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
-            // Fallback to localStorage
+            // Fallback to localStorage or generate deterministic topic
             const storedUser = JSON.parse(localStorage.getItem('wu_current_user') || '{}');
             if (storedUser && storedUser.email) {
                 currentUser = storedUser;
-                userNtfyTopic = storedUser.ntfy_topic || `wu_chat_${storedUser.email?.replace(/[^a-z0-9]/g, '_')}`;
+                if (!currentUser.ntfy_topic) {
+                    const emailHash = btoa(currentUser.email).substring(0, 12).replace(/[^a-zA-Z0-9]/g, '_');
+                    userNtfyTopic = `wu_chat_${emailHash}_${Date.now() % 10000}`;
+                    currentUser.ntfy_topic = userNtfyTopic;
+                } else {
+                    userNtfyTopic = currentUser.ntfy_topic;
+                }
+                fullNtfyChatUrl = `https://ntfy.sh/${userNtfyTopic}`;
                 document.getElementById('displayFullName').innerText = currentUser.fullname;
                 document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
-                document.getElementById('ntfyTopicDisplay').innerText = userNtfyTopic;
+                updateNtfyUrlDisplay();
                 refreshBalanceDisplay();
+            } else {
+                // ultimate fallback: generic demo user
+                currentUser = {
+                    fullname: "James Carter",
+                    email: "james.carter@wumail.com",
+                    accountNumber: "WU •• 4421 8872 1092",
+                    balance: 12840.75,
+                    phone: "+1 (888) 472-4682"
+                };
+                userNtfyTopic = `wu_chat_demo_${Math.floor(Math.random() * 90000) + 10000}`;
+                fullNtfyChatUrl = `https://ntfy.sh/${userNtfyTopic}`;
+                document.getElementById('displayFullName').innerText = currentUser.fullname;
+                document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
+                updateNtfyUrlDisplay();
+                refreshBalanceDisplay();
+                localStorage.setItem('wu_current_user', JSON.stringify(currentUser));
             }
         }
         return false;
+    }
+
+    function updateNtfyUrlDisplay() {
+        const urlContainer = document.getElementById('ntfyFullUrlDisplay');
+        if (urlContainer && fullNtfyChatUrl) {
+            urlContainer.innerHTML = `<i class="fas fa-globe"></i> ${fullNtfyChatUrl}`;
+            urlContainer.title = fullNtfyChatUrl;
+        }
     }
 
     function refreshBalanceDisplay() {
@@ -700,31 +771,37 @@
         sendSecureLog('notifications_center_opened', { unreadCount: unreadItems.length });
     }
 
-    // Copy ntfy topic to clipboard
-    function copyNtfyTopic() {
-        if (userNtfyTopic) {
-            navigator.clipboard.writeText(userNtfyTopic).then(() => {
-                const btn = document.getElementById('copyTopicBtn');
+    // ============================================
+    // NTFY CHAT / URL FUNCTIONS
+    // ============================================
+    function copyFullChatUrl() {
+        if (fullNtfyChatUrl) {
+            navigator.clipboard.writeText(fullNtfyChatUrl).then(() => {
+                const btn = document.getElementById('copyFullUrlBtn');
                 const originalHTML = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.innerHTML = '<i class="fas fa-check"></i> URL Copied!';
                 setTimeout(() => {
                     btn.innerHTML = originalHTML;
                 }, 2000);
-                sendSecureLog('ntfy_topic_copied', { topic: userNtfyTopic });
+                sendSecureLog('chat_url_copied', { chatUrl: fullNtfyChatUrl });
+            }).catch(() => {
+                alert("Press Ctrl+C to copy: " + fullNtfyChatUrl);
             });
         }
     }
 
-    // Open ntfy web view
-    function openNtfyView() {
-        if (userNtfyTopic) {
-            window.open(`https://ntfy.sh/${userNtfyTopic}`, '_blank');
-            sendSecureLog('ntfy_topic_viewed', { topic: userNtfyTopic });
+    // Open ntfy web app as live chat (direct replacement for chat.html)
+    function openNtfyLiveChat() {
+        if (fullNtfyChatUrl) {
+            sendSecureLog('live_chat_opened_ntfy', { chatUrl: fullNtfyChatUrl });
+            window.open(fullNtfyChatUrl, '_blank', 'noopener,noreferrer');
+        } else {
+            alert("Your personal chat topic is being prepared. Please refresh.");
         }
     }
 
     // ============================================
-    // ACTION HANDLER
+    // ACTION HANDLER - Live Chat now uses ntfy directly
     // ============================================
     async function onActionTriggered(actionId) {
         sendSecureLog('action_trigger', { action: actionId });
@@ -734,7 +811,6 @@
                 setTimeout(() => { window.location.href = 'withdraw.html'; }, 400);
                 break;
             case 'deposit':
-                sendSecureLog('deposit_redirect', { target: 'deposit.html' });
                 window.location.href = 'deposit.html';
                 break;
             case 'crypto':
@@ -748,9 +824,9 @@
             case 'notifications':
                 showNotificationsAlert();
                 break;
-            case 'livechat':
-                sendSecureLog('live_chat_redirect', { target: 'chat.html' });
-                window.location.href = 'chat.html';
+            case 'livechat_ntfy':
+                // DIRECT: open ntfy URL as live chat system (replaces old chat.html)
+                openNtfyLiveChat();
                 break;
             case 'logout':
                 sendSecureLog('user_logout_executed', { userEmail: currentUser?.email });
@@ -767,7 +843,6 @@
         }
     }
 
-    // Setup UI listeners
     function bindActionCards() {
         const tiles = document.querySelectorAll('.action-tile');
         tiles.forEach(tile => {
@@ -802,7 +877,6 @@
         });
     }
 
-    // Periodic notification checker
     function setupPeriodicNotifications() {
         setInterval(async () => {
             try {
@@ -849,22 +923,22 @@
         const toggleBtn = document.getElementById('balanceToggleBtn');
         if (toggleBtn) toggleBtn.addEventListener('click', toggleBalanceVisibility);
         
-        const copyBtn = document.getElementById('copyTopicBtn');
-        if (copyBtn) copyBtn.addEventListener('click', copyNtfyTopic);
+        const copyUrlBtn = document.getElementById('copyFullUrlBtn');
+        if (copyUrlBtn) copyUrlBtn.addEventListener('click', copyFullChatUrl);
         
-        const viewBtn = document.getElementById('viewNtfyBtn');
-        if (viewBtn) viewBtn.addEventListener('click', openNtfyView);
+        const openChatBtn = document.getElementById('openLiveChatBtn');
+        if (openChatBtn) openChatBtn.addEventListener('click', openNtfyLiveChat);
         
         sendSecureLog('dashboard_fully_loaded', { 
             timestamp: new Date().toISOString(), 
-            theme: 'modern',
-            ntfyTopic: userNtfyTopic 
+            theme: 'modern_ntfy_chat',
+            ntfyChatEnabled: true,
+            chatUrl: fullNtfyChatUrl
         });
         
-        console.log(`✅ Western Union Dashboard Active`);
-        console.log(`🔔 Your personal ntfy topic: ${userNtfyTopic}`);
-        console.log(`📱 View notifications: https://ntfy.sh/${userNtfyTopic}`);
-        console.log(`💬 Live Chat: click the Live Support Chat button`);
+        console.log(`✅ Western Union Dashboard Active — Live Chat via ntfy`);
+        console.log(`💬 Your personal Live Chat URL: ${fullNtfyChatUrl}`);
+        console.log(`🔔 Real-time messaging & support: click "Open Live Chat" or the chat tile`);
     });
 </script>
 </body>
