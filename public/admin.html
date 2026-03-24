@@ -2,262 +2,467 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Admin Panel | Western Union Management</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230033A0'/><text x='50' y='70' font-size='50' text-anchor='middle' fill='%23FFD700' font-weight='bold'>WU</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .section {
-            margin: 20px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background: #007bff;
+        .header {
+            background: linear-gradient(135deg, #0033A0, #002366);
             color: white;
-            padding: 10px 15px;
+            padding: 20px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: #FFD700;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0033A0;
+        }
+        .logo-text { font-size: 1.5rem; font-weight: 700; }
+        .admin-badge {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+        .nav-btn {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+        .nav-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        .container { max-width: 1400px; margin: 30px auto; padding: 0 24px; }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #0033A0; }
+        .stat-label { color: #64748B; font-size: 0.85rem; margin-top: 5px; }
+        
+        /* Users Table */
+        .users-section {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        .section-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .section-title { font-size: 1.3rem; color: #0033A0; font-weight: 700; }
+        .search-box {
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 40px;
+            width: 250px;
+            font-size: 0.9rem;
+        }
+        .search-box:focus { outline: none; border-color: #FFD700; }
+        .users-table { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f8fafc; font-weight: 600; color: #1e293b; }
+        tr:hover { background: #f8fafc; }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-inactive { background: #fee2e2; color: #991b1b; }
+        .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .action-btn {
+            padding: 6px 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 5px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
         }
-        button:hover {
-            background: #0056b3;
+        .btn-credit { background: #10B981; color: white; }
+        .btn-debit { background: #F59E0B; color: white; }
+        .btn-message { background: #3B82F6; color: white; }
+        .btn-password { background: #8B5CF6; color: white; }
+        .btn-toggle { background: #EF4444; color: white; }
+        .btn-active { background: #10B981; }
+        .action-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
-        .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            padding: 28px;
+            animation: modalFade 0.3s ease;
         }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .user-list {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
+        @keyframes modalFade {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .modal-title { font-size: 1.3rem; font-weight: 700; color: #0033A0; }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+        .modal-input:focus { outline: none; border-color: #FFD700; }
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #0033A0, #002366);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .topic-link {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #0033A0;
+            cursor: pointer;
+        }
+        .topic-link:hover { text-decoration: underline; }
+        .footer { background: white; padding: 20px; text-align: center; margin-top: 30px; border-top: 1px solid #e2e8f0; }
+        @media (max-width: 768px) {
+            th, td { padding: 12px; }
+            .action-buttons { flex-direction: column; }
+            .search-box { width: 100%; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Admin Panel</h1>
-        
-        <div class="section">
-            <h3>Send Message to User</h3>
-            <select id="userSelect">
-                <option value="">Select a user</option>
-            </select>
-            <textarea id="adminMessage" placeholder="Type your message here..." rows="3"></textarea>
-            <button onclick="sendMessageToUser()">Send Message</button>
-            <div id="messageResult"></div>
-        </div>
-
-        <div class="section">
-            <h3>All Users</h3>
-            <button onclick="loadAllUsers()">Refresh Users List</button>
-            <div id="usersList" class="user-list"></div>
-        </div>
-
-        <div class="section">
-            <h3>Send Funds to User</h3>
-            <select id="fundUserSelect">
-                <option value="">Select a user</option>
-            </select>
-            <input type="number" id="fundAmount" placeholder="Amount">
-            <input type="text" id="fundDescription" placeholder="Description">
-            <button onclick="sendFundsToUser()">Send Funds</button>
-            <div id="fundResult"></div>
-        </div>
-
-        <div class="section">
-            <h3>Chat Messages</h3>
-            <div id="chatMessages" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;"></div>
-            <input type="text" id="chatMessage" placeholder="Type a message to all users...">
-            <button onclick="sendAdminMessage()">Send to All Users</button>
-        </div>
-
-        <div style="margin-top: 20px;">
-            <button onclick="logout()" style="background: #dc3545;">Logout</button>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-crown"></i></div>
+                <div>
+                    <div class="logo-text">Admin Panel</div>
+                    <div class="admin-badge">Western Union Management</div>
+                </div>
+            </div>
+            <div>
+                <a href="dashboard.html" class="nav-btn"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="#" id="logoutBtn" class="nav-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
         </div>
     </div>
-
+    
+    <div class="container">
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card"><div class="stat-value" id="totalUsers">0</div><div class="stat-label">Total Users</div></div>
+            <div class="stat-card"><div class="stat-value" id="activeUsers">0</div><div class="stat-label">Active Users</div></div>
+            <div class="stat-card"><div class="stat-value" id="totalBalance">$0</div><div class="stat-label">Total Balance</div></div>
+            <div class="stat-card"><div class="stat-value" id="newUsers">0</div><div class="stat-label">New This Week</div></div>
+        </div>
+        
+        <div class="users-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-users"></i> User Management</h2>
+                <input type="text" id="searchInput" class="search-box" placeholder="Search by name or email...">
+            </div>
+            <div class="users-table">
+                <table>
+                    <thead>
+                        <tr><th>User</th><th>Account</th><th>Balance</th><th>ntfy Topic</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 Western Union Holdings, Inc. | Admin Panel | All actions are logged</p>
+    </footer>
+    
+    <!-- Modals -->
+    <div id="creditModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title"><i class="fas fa-plus-circle"></i> Credit User</h3><button class="close-modal" onclick="closeModal('creditModal')">×</button></div><input type="number" id="creditAmount" class="modal-input" placeholder="Amount to credit"><input type="text" id="creditDesc" class="modal-input" placeholder="Description (optional)"><button class="modal-btn" onclick="submitCredit()">Credit Funds</button></div></div>
+    <div id="debitModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title"><i class="fas fa-minus-circle"></i> Debit User</h3><button class="close-modal" onclick="closeModal('debitModal')">×</button></div><input type="number" id="debitAmount" class="modal-input" placeholder="Amount to debit"><input type="text" id="debitDesc" class="modal-input" placeholder="Description (optional)"><button class="modal-btn" onclick="submitDebit()">Debit Funds</button></div></div>
+    <div id="messageModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title"><i class="fas fa-envelope"></i> Send Message</h3><button class="close-modal" onclick="closeModal('messageModal')">×</button></div><input type="text" id="messageSubject" class="modal-input" placeholder="Subject"><textarea id="messageText" class="modal-input" rows="4" placeholder="Message content..."></textarea><button class="modal-btn" onclick="submitMessage()">Send Message</button></div></div>
+    <div id="passwordModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 class="modal-title"><i class="fas fa-key"></i> Change Password</h3><button class="close-modal" onclick="closeModal('passwordModal')">×</button></div><input type="password" id="newPassword" class="modal-input" placeholder="New password"><button class="modal-btn" onclick="submitPassword()">Change Password</button></div></div>
+    
     <script>
-        // Load users when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadAllUsers();
-            loadChatMessages();
-            setInterval(loadChatMessages, 5000); // Refresh messages every 5 seconds
-        });
-
-        // Load all users
-        async function loadAllUsers() {
+        let users = [];
+        let selectedUser = null;
+        
+        async function loadUsers() {
             try {
-                const response = await fetch('/fetch-users');
-                const users = await response.json();
-                
-                const userSelect = document.getElementById('userSelect');
-                const fundUserSelect = document.getElementById('fundUserSelect');
-                const usersList = document.getElementById('usersList');
-                
-                // Clear existing options
-                userSelect.innerHTML = '<option value="">Select a user</option>';
-                fundUserSelect.innerHTML = '<option value="">Select a user</option>';
-                usersList.innerHTML = '';
-                
-                users.forEach(user => {
-                    // Add to select dropdowns
-                    const option = document.createElement('option');
-                    option.value = user.email;
-                    option.textContent = `${user.fullname} (${user.email})`;
-                    userSelect.appendChild(option.cloneNode(true));
-                    fundUserSelect.appendChild(option);
-                    
-                    // Add to users list
-                    const userDiv = document.createElement('div');
-                    userDiv.innerHTML = `<strong>${user.fullname}</strong> - ${user.email}`;
-                    userDiv.style.padding = '5px';
-                    userDiv.style.borderBottom = '1px solid #eee';
-                    usersList.appendChild(userDiv);
-                });
+                const response = await fetch('/api/admin/users');
+                if (response.ok) {
+                    users = await response.json();
+                    updateStats();
+                    renderUsersTable();
+                } else if (response.status === 401) {
+                    window.location.href = '/login';
+                }
             } catch (error) {
                 console.error('Error loading users:', error);
             }
         }
-
-        // Send message to specific user
-        async function sendMessageToUser() {
-            const userEmail = document.getElementById('userSelect').value;
-            const message = document.getElementById('adminMessage').value;
-            const resultDiv = document.getElementById('messageResult');
+        
+        function updateStats() {
+            const activeUsers = users.filter(u => u.active).length;
+            const totalBalance = users.reduce((sum, u) => sum + (u.balance || 0), 0);
+            const thisWeek = new Date();
+            thisWeek.setDate(thisWeek.getDate() - 7);
+            const newUsers = users.filter(u => new Date(u.created_at) > thisWeek).length;
             
-            if (!userEmail || !message) {
-                resultDiv.innerHTML = '<div class="error">Please select a user and enter a message</div>';
-                return;
-            }
-            
-            try {
-                const response = await fetch('/admin-chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        selectedUser: userEmail,
-                        message: message
-                    })
-                });
-                
-                if (response.ok) {
-                    resultDiv.innerHTML = '<div class="success">Message sent successfully!</div>';
-                    document.getElementById('adminMessage').value = '';
-                } else {
-                    resultDiv.innerHTML = '<div class="error">Failed to send message</div>';
-                }
-            } catch (error) {
-                resultDiv.innerHTML = '<div class="error">Error sending message</div>';
-            }
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('activeUsers').textContent = activeUsers;
+            document.getElementById('totalBalance').textContent = '$' + totalBalance.toLocaleString();
+            document.getElementById('newUsers').textContent = newUsers;
         }
-
-        // Send funds to user
-        async function sendFundsToUser() {
-            const userEmail = document.getElementById('fundUserSelect').value;
-            const amount = document.getElementById('fundAmount').value;
-            const description = document.getElementById('fundDescription').value;
-            const resultDiv = document.getElementById('fundResult');
+        
+        function renderUsersTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = users.filter(u => 
+                u.fullname.toLowerCase().includes(searchTerm) || 
+                u.email.toLowerCase().includes(searchTerm)
+            );
             
-            if (!userEmail || !amount) {
-                resultDiv.innerHTML = '<div class="error">Please select a user and enter amount</div>';
-                return;
-            }
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = filtered.map(user => `
+                <tr>
+                    <td>
+                        <strong>${escapeHtml(user.fullname)}</strong><br>
+                        <small style="color:#64748B">${escapeHtml(user.email)}</small>
+                    </td>
+                    <td><code>${user.account_number}</code></td>
+                    <td><strong>$${(user.balance || 0).toLocaleString()}</strong></td>
+                    <td><span class="topic-link" onclick="copyTopic('${user.ntfy_topic}')" title="Click to copy">${user.ntfy_topic}</span><br>
+                        <small style="font-size:0.65rem">ntfy.sh/${user.ntfy_topic}</small>
+                    </td>
+                    <td><button class="action-btn ${user.active ? 'status-active' : 'status-inactive'}" style="padding:4px 12px" onclick="toggleStatus('${user.email}')">
+                            ${user.active ? '<i class="fas fa-check-circle"></i> Active' : '<i class="fas fa-ban"></i> Inactive'}
+                        </button>
+                    </td>
+                    <td class="action-buttons">
+                        <button class="action-btn btn-credit" onclick="openModal('creditModal', '${user.email}')"><i class="fas fa-plus"></i> Credit</button>
+                        <button class="action-btn btn-debit" onclick="openModal('debitModal', '${user.email}')"><i class="fas fa-minus"></i> Debit</button>
+                        <button class="action-btn btn-message" onclick="openModal('messageModal', '${user.email}')"><i class="fas fa-envelope"></i> Message</button>
+                        <button class="action-btn btn-password" onclick="openModal('passwordModal', '${user.email}')"><i class="fas fa-key"></i> Password</button>
+                        <button class="action-btn btn-toggle" onclick="toggleStatus('${user.email}')"><i class="fas fa-power-off"></i> ${user.active ? 'Deactivate' : 'Activate'}</button>
+                    </td>
+                
+            `).join('');
+        }
+        
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+        
+        function copyTopic(topic) { navigator.clipboard.writeText(topic); alert(`✓ Copied: ${topic}\n\nView notifications at:\nhttps://ntfy.sh/${topic}`); }
+        
+        function openModal(modalId, userEmail) {
+            selectedUser = userEmail;
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+        
+        async function submitCredit() {
+            const amount = document.getElementById('creditAmount').value;
+            const description = document.getElementById('creditDesc').value;
+            if (!amount || amount <= 0) { alert('Please enter a valid amount'); return; }
             
             try {
-                // This would need a dedicated API endpoint for admin funds transfer
-                const response = await fetch('/api/admin-transfer', {
+                const response = await fetch('/api/admin/credit', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userEmail: userEmail,
-                        amount: parseFloat(amount),
-                        description: description
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: selectedUser, amount: parseFloat(amount), description })
                 });
-                
                 const result = await response.json();
                 if (response.ok) {
-                    resultDiv.innerHTML = '<div class="success">Funds sent successfully!</div>';
-                    document.getElementById('fundAmount').value = '';
-                    document.getElementById('fundDescription').value = '';
-                } else {
-                    resultDiv.innerHTML = `<div class="error">${result.message}</div>`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = '<div class="error">Error sending funds</div>';
-            }
+                    alert(`✓ ${result.message}`);
+                    closeModal('creditModal');
+                    document.getElementById('creditAmount').value = '';
+                    document.getElementById('creditDesc').value = '';
+                    loadUsers();
+                } else { alert(result.error || 'Error'); }
+            } catch (error) { alert('Error processing request'); }
         }
-
-        // Load chat messages
-        async function loadChatMessages() {
-            try {
-                const response = await fetch('/fetch-messages');
-                const messages = await response.json();
-                const chatDiv = document.getElementById('chatMessages');
-                chatDiv.innerHTML = messages.map(msg => 
-                    `<div style="padding: 5px; border-bottom: 1px solid #eee;">${msg}</div>`
-                ).join('');
-            } catch (error) {
-                console.error('Error loading messages:', error);
-            }
-        }
-
-        // Send admin message to all users
-        async function sendAdminMessage() {
-            const message = document.getElementById('chatMessage').value;
-            if (!message) return;
+        
+        async function submitDebit() {
+            const amount = document.getElementById('debitAmount').value;
+            const description = document.getElementById('debitDesc').value;
+            if (!amount || amount <= 0) { alert('Please enter a valid amount'); return; }
             
             try {
-                // This would need to be implemented - sending to all users
-                const response = await fetch('/admin-broadcast', {
+                const response = await fetch('/api/admin/debit', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message: message })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: selectedUser, amount: parseFloat(amount), description })
                 });
-                
-                document.getElementById('chatMessage').value = '';
-                loadChatMessages(); // Refresh messages
-            } catch (error) {
-                console.error('Error sending message:', error);
-            }
+                const result = await response.json();
+                if (response.ok) {
+                    alert(`✓ ${result.message}`);
+                    closeModal('debitModal');
+                    document.getElementById('debitAmount').value = '';
+                    document.getElementById('debitDesc').value = '';
+                    loadUsers();
+                } else { alert(result.error || 'Error'); }
+            } catch (error) { alert('Error processing request'); }
         }
-
-        // Logout
+        
+        async function submitMessage() {
+            const subject = document.getElementById('messageSubject').value;
+            const message = document.getElementById('messageText').value;
+            if (!message) { alert('Please enter a message'); return; }
+            
+            try {
+                const response = await fetch('/api/admin/send-message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: selectedUser, subject: subject || 'Message from Admin', message })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert(`✓ Message sent successfully!`);
+                    closeModal('messageModal');
+                    document.getElementById('messageSubject').value = '';
+                    document.getElementById('messageText').value = '';
+                } else { alert(result.error || 'Error'); }
+            } catch (error) { alert('Error sending message'); }
+        }
+        
+        async function submitPassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            if (!newPassword || newPassword.length < 4) { alert('Password must be at least 4 characters'); return; }
+            
+            try {
+                const response = await fetch('/api/admin/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail: selectedUser, newPassword })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert(`✓ Password changed successfully!`);
+                    closeModal('passwordModal');
+                    document.getElementById('newPassword').value = '';
+                } else { alert(result.error || 'Error'); }
+            } catch (error) { alert('Error changing password'); }
+        }
+        
+        async function toggleStatus(userEmail) {
+            if (!confirm('Are you sure you want to change this user\'s status?')) return;
+            
+            try {
+                const response = await fetch('/api/admin/toggle-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userEmail })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert(`✓ Account ${result.active ? 'activated' : 'deactivated'}`);
+                    loadUsers();
+                } else { alert(result.error || 'Error'); }
+            } catch (error) { alert('Error toggling status'); }
+        }
+        
         async function logout() {
-            await fetch('/logout', { method: 'POST' });
-            window.location.href = '/login';
+            try {
+                await fetch('/logout', { method: 'POST' });
+                window.location.href = '/login';
+            } catch (error) { window.location.href = '/login'; }
         }
+        
+        document.getElementById('searchInput').addEventListener('input', () => renderUsersTable());
+        document.getElementById('logoutBtn').addEventListener('click', (e) => { e.preventDefault(); logout(); });
+        
+        window.onclick = (e) => {
+            if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+        };
+        
+        loadUsers();
+        setInterval(loadUsers, 30000);
     </script>
 </body>
 </html>
