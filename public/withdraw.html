@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Funds - Western Swift Connect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #283593;
+            --accent: #5c6bc0;
+            --light: #e8eaf6;
+            --success: #2e7d32;
+            --warning: #f57c00;
+            --danger: #c62828;
+            --nigeria-green: #008751;
+            --nigeria-white: #ffffff;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, #1a237e, #3949ab);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .transaction-item {
+            border-left: 4px solid var(--accent);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: white;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .transaction-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .credit {
+            border-left-color: var(--success);
+        }
+        
+        .debit {
+            border-left-color: var(--danger);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.2rem rgba(92, 107, 192, 0.25);
+        }
+        
+        .transfer-icon {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+        
+        .security-notice {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+        
+        .recent-transactions {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #757575;
+        }
+        
+        .step.active .step-circle {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .step.completed .step-circle {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: #757575;
+            text-align: center;
+        }
+        
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .transfer-summary {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .payment-type-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .crypto-badge {
+            background-color: #f39c12;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        
+        .currency-converter {
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .conversion-rate {
+            font-size: 14px;
+            color: #2e7d32;
+            margin-top: 5px;
+        }
+        
+        .nigeria-badge {
+            background: linear-gradient(135deg, var(--nigeria-green), #00663b);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .step-label {
+                font-size: 10px;
+            }
+            .balance-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-university me-2"></i>Western Swift Connect
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="fas fa-home me-1"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/transfer"><i class="fas fa-exchange-alt me-1"></i> Transfer</a></li>
+                    <li class="nav-item"><a class="nav-link" href="history.html"><i class="fas fa-history me-1"></i> History</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://wa.me/+12568212395" target="_blank" id="whatsappSupportLink">
+                            <i class="fab fa-whatsapp me-1"></i> Support
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/notifications"><i class="fas fa-bell me-1"></i> Notifications<span class="notification-badge">3</span></a></li>
+                </ul>
+                <div class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span id="userFullname">User Name</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><form id="logoutForm" action="/logout" method="POST"><button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Logout</button></form></li>
+                        </ul>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-exchange-alt me-2"></i> Transfer Funds</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-indicator">
+                            <div class="step active"><div class="step-circle">1</div><div class="step-label">Payment Method</div></div>
+                            <div class="step"><div class="step-circle">2</div><div class="step-label">Recipient Details</div></div>
+                            <div class="step"><div class="step-circle">3</div><div class="step-label">Transfer Details</div></div>
+                            <div class="step"><div class="step-circle">4</div><div class="step-label">Confirmation</div></div>
+                        </div>
+
+                        <form id="transferForm">
+                            <div id="step1" class="form-step">
+                                <h5 class="mb-3">Select Payment Method</h5>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="paymentType" class="form-label">Payment Type</label>
+                                        <select class="form-select" id="paymentType" name="paymentType" required>
+                                            <option value="">Select Payment Type</option>
+                                            <optgroup label="Bank Transfers">
+                                                <option value="bank_transfer">Bank Transfer</option>
+                                                <option value="wire_transfer">Wire Transfer</option>
+                                                <option value="ach_transfer">ACH Transfer</option>
+                                                <option value="sepa_transfer">SEPA Transfer</option>
+                                                <option value="swift_transfer">SWIFT Transfer</option>
+                                                <option value="uk_bank">UK Bank Transfer</option>
+                                                <option value="canada_bank">Canada Bank Transfer</option>
+                                                <option value="australia_bank">Australia Bank Transfer</option>
+                                                <option value="europe_bank">European Bank Transfer</option>
+                                                <option value="nigeria_bank">Nigeria Bank Transfer (NIBSS / NIP)</option>
+                                            </optgroup>
+                                            <optgroup label="Digital Wallets">
+                                                <option value="paypal">PayPal</option><option value="zelle">Zelle</option><option value="venmo">Venmo</option>
+                                                <option value="cashapp">Cash App</option><option value="googlepay">Google Pay</option><option value="applepay">Apple Pay</option>
+                                                <option value="skrill">Skrill</option><option value="neteller">Neteller</option><option value="payoneer">Payoneer</option><option value="wise">Wise (TransferWise)</option>
+                                            </optgroup>
+                                            <optgroup label="Cryptocurrencies">
+                                                <option value="bitcoin">Bitcoin (BTC)</option><option value="ethereum">Ethereum (ETH)</option><option value="litecoin">Litecoin (LTC)</option>
+                                                <option value="bitcoin_cash">Bitcoin Cash (BCH)</option><option value="ripple">Ripple (XRP)</option><option value="cardano">Cardano (ADA)</option>
+                                                <option value="polkadot">Polkadot (DOT)</option><option value="dogecoin">Dogecoin (DOGE)</option><option value="solana">Solana (SOL)</option>
+                                                <option value="tron">TRON (TRX)</option><option value="stellar">Stellar (XLM)</option><option value="monero">Monero (XMR)</option>
+                                                <option value="dash">Dash</option><option value="zcash">Zcash (ZEC)</option>
+                                            </optgroup>
+                                            <optgroup label="Mobile Money">
+                                                <option value="momo_ghana">Mobile Money Ghana</option><option value="mpesa_kenya">M-Pesa Kenya</option>
+                                                <option value="mtn_momo">MTN Mobile Money</option><option value="airtel_money">Airtel Money</option><option value="orange_money">Orange Money</option>
+                                            </optgroup>
+                                            <optgroup label="Other Methods">
+                                                <option value="western_union">Western Union</option><option value="moneygram">MoneyGram</option>
+                                                <option value="ria">Ria Money Transfer</option><option value="worldremit">WorldRemit</option><option value="remitly">Remitly</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary" disabled>Previous</button>
+                                    <button type="button" class="btn btn-primary" id="nextToStep2">Next</button>
+                                </div>
+                            </div>
+                            
+                            <div id="step2" class="form-step d-none">
+                                <h5 class="mb-3">Recipient Information</h5>
+                                <div id="recipientDetailsForm"></div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary" id="backToStep1">Previous</button>
+                                    <button type="button" class="btn btn-primary" id="nextToStep3">Next</button>
+                                </div>
+                            </div>
+                            
+                            <div id="step3" class="form-step d-none">
+                                <h5 class="mb-3">Transfer Details</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="amount" class="form-label">Amount ($)</label>
+                                        <input type="number" class="form-control" id="amount" name="amount" min="1" step="0.01" required>
+                                        <div class="form-text">Available balance: $<span id="availableBalance">0.00</span></div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="transferDate" class="form-label">Transfer Date</label>
+                                        <input type="date" class="form-control" id="transferDate" name="transferDate" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description (Optional)</label>
+                                    <textarea class="form-control" id="description" name="description" rows="2" placeholder="Add a note about this transfer"></textarea>
+                                </div>
+                                <div id="currencyConverter" class="currency-converter d-none">
+                                    <h6><i class="fas fa-exchange-alt me-2"></i> Currency Conversion</h6>
+                                    <div class="row">
+                                        <div class="col-md-6"><label for="sourceCurrency" class="form-label">From Currency</label><select class="form-select" id="sourceCurrency"><option value="USD">US Dollar (USD)</option></select></div>
+                                        <div class="col-md-6"><label for="targetCurrency" class="form-label">To Currency</label><select class="form-select" id="targetCurrency"></select></div>
+                                    </div>
+                                    <div class="conversion-rate mt-2"><span id="conversionRateText">Exchange rate: </span><span id="convertedAmountText"></span></div>
+                                </div>
+                                <div class="transfer-summary">
+                                    <h6>Transfer Summary</h6>
+                                    <div class="row"><div class="col-6">Payment Method:</div><div class="col-6" id="summaryPaymentMethod">-</div></div>
+                                    <div class="row"><div class="col-6">Recipient:</div><div class="col-6" id="summaryRecipient">-</div></div>
+                                    <div id="dynamicSummaryFields"></div>
+                                    <div class="row"><div class="col-6">Amount (USD):</div><div class="col-6" id="summaryAmount">-</div></div>
+                                    <div id="convertedAmountSummary" class="d-none"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary" id="backToStep2">Previous</button>
+                                    <button type="button" class="btn btn-primary" id="nextToStep4">Next</button>
+                                </div>
+                            </div>
+                            
+                            <div id="step4" class="form-step d-none">
+                                <div class="text-center mb-4"><i class="fas fa-check-circle text-success" style="font-size: 64px;"></i><h4 class="mt-3">Confirm Your Transfer</h4><p class="text-muted">Please review the details below before confirming</p></div>
+                                <div class="transfer-summary">
+                                    <h6>Transfer Details</h6>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">Payment Method:</div><div class="col-6" id="confirmPaymentMethod">-</div></div>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">From Account:</div><div class="col-6" id="confirmFromAccount">-</div></div>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">To Account:</div><div class="col-6" id="confirmToAccount">-</div></div>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">Recipient Name:</div><div class="col-6" id="confirmRecipient">-</div></div>
+                                    <div id="dynamicConfirmFields"></div>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">Amount (USD):</div><div class="col-6 fw-bold text-success" id="confirmAmount">-</div></div>
+                                    <div id="convertedAmountConfirm" class="d-none"></div>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">Date:</div><div class="col-6" id="confirmDate">-</div></div>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">Description:</div><div class="col-6" id="confirmDescription">-</div></div>
+                                    <hr><div class="row mb-2"><div class="col-6 fw-bold">Transaction Fee:</div><div class="col-6">$0.00</div></div>
+                                    <div class="row mb-2"><div class="col-6 fw-bold">Total Amount (USD):</div><div class="col-6 fw-bold text-primary" id="confirmTotal">-</div></div>
+                                </div>
+                                <div class="form-check mb-4"><input class="form-check-input" type="checkbox" id="confirmCheck" required><label class="form-check-label" for="confirmCheck">I confirm that all the information provided is correct</label></div>
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-secondary" id="backToStep3">Previous</button>
+                                    <button type="button" class="btn btn-success" id="confirmTransfer">Confirm Transfer</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="security-notice"><h6><i class="fas fa-shield-alt me-2"></i> Security Notice</h6><p class="mb-0">For your security, all transactions are monitored and encrypted. Never share your login details or OTP with anyone. Western Swift Connect will never ask for your password via email or phone.</p></div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="balance-card"><div class="d-flex justify-content-between align-items-center"><div><p class="mb-1">Available Balance</p><h2 id="currentBalance">$0.00</h2><p class="mb-0">Account: <span id="userAccountNumber">-</span></p></div><i class="fas fa-wallet fa-3x opacity-75"></i></div></div>
+                <div class="card"><div class="card-header"><h5 class="mb-0"><i class="fas fa-history me-2"></i> Recent Transactions</h5></div><div class="card-body"><div class="recent-transactions" id="recentTransactions"><div class="text-center py-4"><i class="fas fa-spinner fa-spin fa-2x text-muted"></i><p class="mt-2 text-muted">Loading transactions...</p></div></div><div class="text-center mt-3"><a href="history.html" class="btn btn-outline-primary btn-sm">View All Transactions</a></div></div></div>
+                <div class="card"><div class="card-header"><h5 class="mb-0"><i class="fas fa-bolt me-2"></i> Quick Actions</h5></div><div class="card-body"><div class="d-grid gap-2"><a href="/dashboard" class="btn btn-outline-primary"><i class="fas fa-home me-2"></i> Dashboard</a><a href="history.html" class="btn btn-outline-primary"><i class="fas fa-list me-2"></i> Transaction History</a><a href="https://wa.me/+12568212395" target="_blank" class="btn btn-outline-primary"><i class="fab fa-whatsapp me-2"></i> WhatsApp Support</a></div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-5"><div class="container"><div class="row"><div class="col-md-4 mb-3"><h5>Western Swift Connect</h5><p>Secure and reliable banking services for all your financial needs.</p></div><div class="col-md-2 mb-3"><h5>Services</h5><ul class="list-unstyled"><li><a href="#" class="text-light">Personal Banking</a></li><li><a href="#" class="text-light">Business Banking</a></li><li><a href="#" class="text-light">Loans</a></li><li><a href="#" class="text-light">Investments</a></li></ul></div><div class="col-md-2 mb-3"><h5>Support</h5><ul class="list-unstyled"><li><a href="#" class="text-light">Help Center</a></li><li><a href="#" class="text-light">Contact Us</a></li><li><a href="#" class="text-light">Security Tips</a></li><li><a href="#" class="text-light">FAQ</a></li></ul></div><div class="col-md-4 mb-3"><h5>Contact Info</h5><ul class="list-unstyled"><li><i class="fab fa-whatsapp me-2"></i> +1 (256) 821-2395</li><li><i class="fas fa-envelope me-2"></i> support@westernswiftconnect.com</li><li><i class="fas fa-map-marker-alt me-2"></i> 123 Financial District, San Francisco, CA</li></ul></div></div><hr class="my-4"><div class="row align-items-center"><div class="col-md-6"><p class="mb-0">&copy; 2025 Western Swift Connect. All rights reserved.</p></div><div class="col-md-6 text-md-end"><a href="#" class="text-light me-3"><i class="fab fa-facebook fa-lg"></i></a><a href="#" class="text-light me-3"><i class="fab fa-twitter fa-lg"></i></a><a href="#" class="text-light me-3"><i class="fab fa-linkedin fa-lg"></i></a><a href="#" class="text-light"><i class="fab fa-instagram fa-lg"></i></a></div></div></div></footer>
+
+    <div class="modal fade" id="activationModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title"><i class="fas fa-lock me-2"></i> Security Verification</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body text-center"><i class="fas fa-shield-alt text-primary mb-3" style="font-size: 64px;"></i><h4>Enter Activation Code</h4><p>Please enter the activation code to complete your transfer.</p><div class="mb-3"><input type="text" class="form-control form-control-lg text-center" id="activationCode" placeholder="Enter activation code" maxlength="8"><div class="form-text">Enter the 8-digit activation code</div></div><div id="activationError" class="alert alert-danger d-none"><i class="fas fa-exclamation-circle me-2"></i> Invalid activation code. <a href="https://wa.me/+12568212395" class="alert-link">Click to contact support</a> to purchase your code.</div></div><div class="modal-footer border-0 justify-content-center"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button type="button" class="btn btn-primary" id="verifyActivationCode">Verify Code</button></div></div></div></div>
+    <div class="modal fade" id="successModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title text-success"><i class="fas fa-check-circle me-2"></i> Transfer Successful</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body text-center"><i class="fas fa-check-circle text-success mb-3" style="font-size: 64px;"></i><h4>Transfer Completed!</h4><p>Your transfer of <strong id="successAmount">$0.00</strong> to <strong id="successRecipient">Recipient Name</strong> has been processed successfully.</p><p class="mb-0">Transaction ID: <span id="successTransactionId" class="text-muted">-</span></p></div><div class="modal-footer border-0 justify-content-center"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button><button type="button" class="btn btn-outline-primary" id="printReceipt">Print Receipt</button></div></div></div></div>
+    <div class="modal fade" id="errorModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title text-danger"><i class="fas fa-exclamation-circle me-2"></i> Transfer Failed</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body text-center"><i class="fas fa-times-circle text-danger mb-3" style="font-size: 64px;"></i><h4>Transfer Unsuccessful</h4><p id="errorMessage">An error occurred while processing your transfer. Please try again.</p></div><div class="modal-footer border-0 justify-content-center"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">Try Again</button></div></div></div></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let userData = null, currentStep = 1, currentExchangeRate = 1, targetCurrency = 'USD';
+        const CORRECT_ACTIVATION_CODE = "UK1917WU";
+        const cryptoRates = { BTC:0.000025, ETH:0.0004, LTC:0.005, BCH:0.002, XRP:1.5, ADA:2.0, DOT:0.1, DOGE:10, SOL:0.05, TRX:15, XLM:5, XMR:0.0006, DASH:0.003, ZEC:0.008 };
+        
+        const paymentTypes = {
+            bank_transfer:{name:"Bank Transfer",currency:"USD",fields:[{name:"accountNumber",label:"Account Number",type:"text",required:true},{name:"routingNumber",label:"Routing Number / SWIFT Code",type:"text",required:true},{name:"bankName",label:"Bank Name",type:"text",required:true},{name:"accountName",label:"Account Holder Name",type:"text",required:true}]},
+            wire_transfer:{name:"Wire Transfer",currency:"USD",fields:[{name:"accountNumber",label:"Account Number",type:"text",required:true},{name:"swiftCode",label:"SWIFT/BIC Code",type:"text",required:true},{name:"bankName",label:"Bank Name",type:"text",required:true},{name:"bankAddress",label:"Bank Address",type:"text",required:true},{name:"accountName",label:"Account Holder Name",type:"text",required:true}]},
+            nigeria_bank:{name:"Nigeria Bank Transfer (NIBSS/NIP)",currency:"NGN",fields:[{name:"accountNumber",label:"NUBAN Account Number (10 digits)",type:"text",required:true},{name:"bankName",label:"Bank Name",type:"select",required:true,options:["Access Bank","GTBank","Zenith Bank","First Bank","UBA","Fidelity Bank","Stanbic IBTC","Union Bank","Ecobank","Polaris Bank","Keystone Bank","Wema Bank","Unity Bank","Jaiz Bank","Providus Bank","Titan Trust Bank","Globus Bank","Premium Trust Bank","Sterling Bank","SunTrust Bank","CitiBank","Standard Chartered","Rand Merchant Bank"]},{name:"accountName",label:"Account Holder Name",type:"text",required:true},{name:"bvn",label:"BVN (Optional)",type:"text",required:false},{name:"nubanCode",label:"Bank Code (NIP optional)",type:"text",required:false}]},
+            ach_transfer:{name:"ACH Transfer",currency:"USD",fields:[{name:"accountNumber",label:"Account Number",type:"text",required:true},{name:"routingNumber",label:"Routing Number",type:"text",required:true},{name:"accountName",label:"Account Holder Name",type:"text",required:true},{name:"accountType",label:"Account Type",type:"select",required:true,options:["Checking","Savings"]}]},
+            ...Object.fromEntries(['sepa_transfer','swift_transfer','uk_bank','canada_bank','australia_bank','europe_bank','paypal','zelle','venmo','cashapp','googlepay','applepay','skrill','neteller','payoneer','wise','bitcoin','ethereum','litecoin','bitcoin_cash','ripple','cardano','polkadot','dogecoin','solana','tron','stellar','monero','dash','zcash','momo_ghana','mpesa_kenya','mtn_momo','airtel_money','orange_money','western_union','moneygram','ria','worldremit','remitly'].map(k=>[k,{name:k.replace(/_/g,' ').toUpperCase(),currency:'USD',fields:[{name:"identifier",label:"Recipient Identifier",type:"text",required:true},{name:"fullName",label:"Full Name",type:"text",required:true}]}]))
+        };
+        ['bitcoin','ethereum','litecoin','bitcoin_cash','ripple','cardano','polkadot','dogecoin','solana','tron','stellar','monero','dash','zcash'].forEach(c=>{if(paymentTypes[c])paymentTypes[c].currency=c.toUpperCase()});
+        
+        document.addEventListener('DOMContentLoaded',()=>{fetchUserData();document.getElementById('transferDate').value=new Date().toISOString().split('T')[0];document.getElementById('nextToStep2').addEventListener('click',goToStep2);document.getElementById('nextToStep3').addEventListener('click',goToStep3);document.getElementById('nextToStep4').addEventListener('click',goToStep4);document.getElementById('backToStep1').addEventListener('click',goToStep1);document.getElementById('backToStep2').addEventListener('click',goToStep2FromStep3);document.getElementById('backToStep3').addEventListener('click',goToStep3FromStep4);document.getElementById('confirmTransfer').addEventListener('click',showActivationModal);document.getElementById('verifyActivationCode').addEventListener('click',verifyActivationCode);document.getElementById('paymentType').addEventListener('change',updatePaymentTypeFields);document.getElementById('amount').addEventListener('input',updateCurrencyConversion);document.getElementById('printReceipt').addEventListener('click',()=>window.print());});
+        
+        function fetchUserData(){fetch('/data').then(r=>r.json()).then(d=>{userData=d;document.getElementById('userFullname').textContent=d.fullname;document.getElementById('currentBalance').textContent=`$${parseFloat(d.balance).toFixed(2)}`;document.getElementById('availableBalance').textContent=parseFloat(d.balance).toFixed(2);document.getElementById('userAccountNumber').textContent=d.account_number;document.getElementById('confirmFromAccount').textContent=d.account_number;loadRecentTransactions();}).catch(e=>{if(e.message.includes('401'))window.location.href='/login';});}
+        function loadRecentTransactions(){fetch('/history').then(r=>r.json()).then(trans=>{const c=document.getElementById('recentTransactions');c.innerHTML='';if(trans.length===0){c.innerHTML='<p class="text-muted text-center py-4">No recent transactions</p>';return;}trans.slice(-5).reverse().forEach(t=>{const div=document.createElement('div');div.className=`transaction-item ${t.type}`;div.innerHTML=`<div class="d-flex justify-content-between"><div><strong>${t.senderName||t.to||'N/A'}</strong><br><small class="text-muted">${new Date(t.date).toLocaleDateString()}</small></div><div class="text-end"><span class="${t.type==='credit'?'text-success':'text-danger'}">${t.type==='credit'?'+':'-'}$${parseFloat(t.amount).toFixed(2)}</span><br><small class="text-muted">${t.transactionId}</small></div></div>`;c.appendChild(div);});}).catch(()=>{document.getElementById('recentTransactions').innerHTML='<p class="text-danger text-center py-4">Error loading transactions</p>';});}
+        
+        function updatePaymentTypeFields(){const type=document.getElementById('paymentType').value,cont=document.getElementById('recipientDetailsForm');if(!type){cont.innerHTML='<p class="text-muted">Please select a payment type</p>';return;}const cfg=paymentTypes[type];let html='';cfg.fields.forEach(f=>{if(f.type==='select')html+=`<div class="mb-3"><label for="${f.name}" class="form-label">${f.label}</label><select class="form-select" id="${f.name}" name="${f.name}" ${f.required?'required':''}><option value="">Select ${f.label}</option>${f.options.map(opt=>`<option value="${opt}">${opt}</option>`).join('')}</select></div>`;else html+=`<div class="mb-3"><label for="${f.name}" class="form-label">${f.label}</label><input type="${f.type}" class="form-control" id="${f.name}" name="${f.name}" ${f.required?'required':''}></div>`;});cont.innerHTML=html;updateCurrencyConverter(cfg.currency);}
+        function updateCurrencyConverter(currency){const conv=document.getElementById('currencyConverter'),sel=document.getElementById('targetCurrency');if(currency!=='USD'){conv.classList.remove('d-none');targetCurrency=currency;sel.innerHTML=`<option value="${currency}">${currency}</option>`;updateCurrencyConversion();}else{conv.classList.add('d-none');targetCurrency='USD';currentExchangeRate=1;}}
+        function updateCurrencyConversion(){const amt=parseFloat(document.getElementById('amount').value)||0;const rateSpan=document.getElementById('conversionRateText'),amtSpan=document.getElementById('convertedAmountText');if(targetCurrency==='USD'){rateSpan.textContent='Exchange rate: 1 USD = 1 USD';amtSpan.textContent='';return;}if(cryptoRates[targetCurrency]){const rate=cryptoRates[targetCurrency];currentExchangeRate=rate;rateSpan.textContent=`Exchange rate: 1 USD = ${rate} ${targetCurrency}`;amtSpan.textContent=`Converted amount: ${(amt*rate).toFixed(8)} ${targetCurrency}`;}else{const fallback={EUR:0.85,GBP:0.73,CAD:1.25,AUD:1.35,GHS:5.8,KES:110,XAF:550,NGN:1470};const rate=fallback[targetCurrency]||1;currentExchangeRate=rate;rateSpan.textContent=`Exchange rate: 1 USD ≈ ${rate} ${targetCurrency}`;amtSpan.textContent=`Converted amount: ${(amt*rate).toFixed(2)} ${targetCurrency}`;}}
+        
+        function goToStep2(){const type=document.getElementById('paymentType').value;if(!type){alert('Please select a payment type');return;}document.getElementById('summaryPaymentMethod').textContent=paymentTypes[type].name;document.getElementById('confirmPaymentMethod').textContent=paymentTypes[type].name;document.getElementById('step1').classList.add('d-none');document.getElementById('step2').classList.remove('d-none');updateStepIndicator(2);currentStep=2;updatePaymentTypeFields();}
+        function goToStep3(){const type=document.getElementById('paymentType').value,cfg=paymentTypes[type];let valid=true;cfg.fields.forEach(f=>{const inp=document.getElementById(f.name);if(f.required&&(!inp||!inp.value)){valid=false;if(inp)inp.classList.add('is-invalid');}else if(inp)inp.classList.remove('is-invalid');});if(!valid){alert('Please fill in all required recipient details');return;}const recipientField=cfg.fields.find(f=>f.name.includes('Name')||f.name.includes('name')||f.name.includes('receiverName'));if(recipientField){const rname=document.getElementById(recipientField.name).value;document.getElementById('summaryRecipient').textContent=rname;document.getElementById('confirmRecipient').textContent=rname;document.getElementById('confirmToAccount').textContent=rname;}let dyn='';cfg.fields.forEach(f=>{const val=document.getElementById(f.name)?.value||'';dyn+=`<div class="row"><div class="col-6">${f.label}:</div><div class="col-6">${val}</div></div>`;});document.getElementById('dynamicSummaryFields').innerHTML=dyn;let dynConfirm='';cfg.fields.forEach(f=>{const val=document.getElementById(f.name)?.value||'';dynConfirm+=`<div class="row mb-2"><div class="col-6 fw-bold">${f.label}:</div><div class="col-6">${val}</div></div>`;});document.getElementById('dynamicConfirmFields').innerHTML=dynConfirm;document.getElementById('step2').classList.add('d-none');document.getElementById('step3').classList.remove('d-none');updateStepIndicator(3);currentStep=3;updateCurrencyConversion();}
+        function goToStep4(){const amt=document.getElementById('amount').value,date=document.getElementById('transferDate').value;if(!amt||amt<=0){alert('Please enter a valid amount');return;}if(parseFloat(amt)>parseFloat(userData.balance)){alert('Insufficient funds for this transfer');return;}if(!date){alert('Please select a transfer date');return;}document.getElementById('summaryAmount').textContent=`$${parseFloat(amt).toFixed(2)}`;const convSum=document.getElementById('convertedAmountSummary');if(targetCurrency!=='USD'){const converted=(parseFloat(amt)*currentExchangeRate).toFixed(targetCurrency in cryptoRates?8:2);convSum.innerHTML=`<div class="row"><div class="col-6">Amount (${targetCurrency}):</div><div class="col-6">${converted} ${targetCurrency}</div></div>`;convSum.classList.remove('d-none');}else convSum.classList.add('d-none');document.getElementById('confirmAmount').textContent=`$${parseFloat(amt).toFixed(2)}`;document.getElementById('confirmTotal').textContent=`$${parseFloat(amt).toFixed(2)}`;document.getElementById('confirmDate').textContent=new Date(date).toLocaleDateString();document.getElementById('confirmDescription').textContent=document.getElementById('description').value||'No description';const convConf=document.getElementById('convertedAmountConfirm');if(targetCurrency!=='USD'){const converted=(parseFloat(amt)*currentExchangeRate).toFixed(targetCurrency in cryptoRates?8:2);convConf.innerHTML=`<div class="row mb-2"><div class="col-6 fw-bold">Amount (${targetCurrency}):</div><div class="col-6 fw-bold text-primary">${converted} ${targetCurrency}</div></div>`;convConf.classList.remove('d-none');}else convConf.classList.add('d-none');document.getElementById('step3').classList.add('d-none');document.getElementById('step4').classList.remove('d-none');updateStepIndicator(4);currentStep=4;}
+        function goToStep1(){document.getElementById('step2').classList.add('d-none');document.getElementById('step1').classList.remove('d-none');updateStepIndicator(1);}
+        function goToStep2FromStep3(){document.getElementById('step3').classList.add('d-none');document.getElementById('step2').classList.remove('d-none');updateStepIndicator(2);}
+        function goToStep3FromStep4(){document.getElementById('step4').classList.add('d-none');document.getElementById('step3').classList.remove('d-none');updateStepIndicator(3);}
+        function updateStepIndicator(step){document.querySelectorAll('.step').forEach((s,i)=>{s.classList.remove('active','completed');if(i+1<step)s.classList.add('completed');else if(i+1===step)s.classList.add('active');});}
+        function showActivationModal(){if(!document.getElementById('confirmCheck').checked){alert('Please confirm that the information is correct');return;}new bootstrap.Modal(document.getElementById('activationModal')).show();document.getElementById('activationError').classList.add('d-none');document.getElementById('activationCode').value='';}
+        function verifyActivationCode(){if(document.getElementById('activationCode').value===CORRECT_ACTIVATION_CODE){document.getElementById('activationError').classList.add('d-none');bootstrap.Modal.getInstance(document.getElementById('activationModal')).hide();handleTransfer();}else document.getElementById('activationError').classList.remove('d-none');}
+        function handleTransfer(){const type=document.getElementById('paymentType').value,cfg=paymentTypes[type];const payload={paymentType:type,amount:document.getElementById('amount').value,description:document.getElementById('description').value,transferDate:document.getElementById('transferDate').value,targetCurrency,exchangeRate:currentExchangeRate};cfg.fields.forEach(f=>{payload[f.name]=document.getElementById(f.name)?.value||'';});const btn=document.getElementById('confirmTransfer');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin me-2"></i> Processing...';fetch('/api/transfer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(r=>r.json()).then(data=>{if(data.message==='Transfer successful!'){document.getElementById('successAmount').textContent=`$${parseFloat(payload.amount).toFixed(2)}`;const nameField=cfg.fields.find(f=>f.name.includes('Name')||f.name.includes('name'));if(nameField)document.getElementById('successRecipient').textContent=payload[nameField.name];document.getElementById('successTransactionId').textContent='txn_'+Math.random().toString(36).substr(2,9).toUpperCase();new bootstrap.Modal(document.getElementById('successModal')).show();fetchUserData();document.getElementById('transferForm').reset();document.getElementById('step4').classList.add('d-none');document.getElementById('step1').classList.remove('d-none');updateStepIndicator(1);}else throw new Error(data.message||'Transfer failed');}).catch(err=>{document.getElementById('errorMessage').textContent=err.message;new bootstrap.Modal(document.getElementById('errorModal')).show();}).finally(()=>{btn.disabled=false;btn.innerHTML='Confirm Transfer';});}
+    </script>
+</body>
+</html>
