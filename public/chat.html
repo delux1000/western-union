@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Live Chat | Western Union Support</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230033A0'/><text x='50' y='70' font-size='50' text-anchor='middle' fill='%23FFD700' font-weight='bold'>WU</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #001a3a 0%, #002b5c 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 15px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #0033A0, #002366);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #FFD700;
+        }
+        .logo-text { font-size: 1.4rem; font-weight: 700; color: #0033A0; }
+        .nav-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #0033A0, #002366);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 51, 160, 0.3); }
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 24px; }
+        .chat-container {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1000px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #0033A0, #002366);
+            padding: 20px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .chat-header-info { display: flex; align-items: center; gap: 15px; }
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            background: #FFD700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #0033A0;
+        }
+        .chat-header-text h2 { color: white; font-size: 1.3rem; margin-bottom: 4px; }
+        .chat-header-text p { color: rgba(255, 255, 255, 0.8); font-size: 0.8rem; }
+        .status-badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #10B981;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; transform: scale(1.2); } }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 24px; background: #F8FAFE; display: flex; flex-direction: column; gap: 16px; }
+        .message { display: flex; gap: 12px; max-width: 80%; animation: slideIn 0.3s ease; }
+        .message.user { align-self: flex-end; flex-direction: row-reverse; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            background: #E2E8F0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .message.user .message-avatar { background: #FFD700; color: #0033A0; }
+        .message.support .message-avatar { background: #0033A0; color: white; }
+        .message-bubble {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .message.user .message-bubble { background: linear-gradient(135deg, #0033A0, #002366); color: white; }
+        .message-time { font-size: 0.7rem; color: #94A3B8; margin-top: 6px; display: block; }
+        .message.user .message-time { color: rgba(255, 255, 255, 0.7); }
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 20px;
+            width: fit-content;
+            margin-left: 24px;
+            margin-bottom: 8px;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #94A3B8;
+            border-radius: 50%;
+            animation: typingAnim 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingAnim { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-10px); } }
+        .chat-input-area { padding: 20px 24px; background: white; border-top: 1px solid #E2E8F0; display: flex; gap: 12px; }
+        .chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #E2E8F0;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        .chat-input:focus { outline: none; border-color: #FFD700; }
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700, #e5c100);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #0033A0;
+            transition: all 0.3s;
+        }
+        .send-btn:hover { transform: scale(1.05); }
+        .user-topic-info {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin: 0 24px 16px 24px;
+            font-size: 0.75rem;
+            color: #475569;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            border: 1px solid #e2e8f0;
+        }
+        .user-topic-info i { color: #FFD700; margin-right: 6px; }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #0033A0;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+        .copy-btn:hover { color: #FFD700; }
+        .footer {
+            background: rgba(0, 26, 58, 0.95);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .chat-container { height: 85vh; }
+            .message { max-width: 90%; }
+            .user-topic-info { margin: 0 16px 12px 16px; flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="dashboard.html" class="logo" style="text-decoration: none;">
+                <div class="logo-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div>
+                    <div class="logo-text">WESTERN UNION</div>
+                    <div style="font-size: 0.7rem; color: #64748B;">Live Support Chat</div>
+                </div>
+            </a>
+            <div class="nav-buttons">
+                <a href="dashboard.html" class="nav-btn"><i class="fas fa-chart-line"></i> Dashboard</a>
+                <a href="#" id="logoutBtn" class="nav-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </div>
+    
+    <main class="main-content">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar"><i class="fas fa-headset"></i></div>
+                    <div class="chat-header-text">
+                        <h2>Western Union Support</h2>
+                        <p>We're here to help 24/7</p>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    <span>Online • Usually replies in minutes</span>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message support">
+                    <div class="message-avatar"><i class="fas fa-headset"></i></div>
+                    <div class="message-bubble">
+                        <div class="message-text">👋 Hello! Welcome to Western Union Live Support.<br><br>I'm here to assist you with:<br>• Account inquiries<br>• Transaction support<br>• Deposit/withdrawal assistance<br>• Security questions<br><br>How can I help you today?</div>
+                        <span class="message-time" id="welcomeTime"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="typingIndicator" class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <span>Support is typing...</span>
+            </div>
+            
+            <div class="user-topic-info" id="userTopicDisplay">
+                <span><i class="fas fa-key"></i> Your Private Topic: <strong id="topicName">Loading...</strong>
+                    <button class="copy-btn" onclick="copyTopic()"><i class="fas fa-copy"></i> Copy</button>
+                </span>
+                <span><i class="fas fa-shield-alt"></i> End-to-End Encrypted</span>
+                <span><i class="fas fa-bell"></i> Real-time Notifications via ntfy</span>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="messageInput" class="chat-input" placeholder="Type your message here..." autocomplete="off">
+                <button id="sendBtn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>© 2026 Western Union Holdings, Inc. All Rights Reserved. | Secure Chat</p>
+    </footer>
+
+    <script>
+        let currentUser = null;
+        let userEmail = '';
+        let userTopic = '';
+        let messages = [];
+        let messageCheckInterval = null;
+        
+        // Get current user data
+        async function loadUserData() {
+            try {
+                const response = await fetch('/data');
+                if (response.ok) {
+                    currentUser = await response.json();
+                    userEmail = currentUser.email;
+                    userTopic = currentUser.ntfy_topic;
+                    document.getElementById('topicName').textContent = userTopic;
+                    document.getElementById('welcomeTime').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    return true;
+                } else if (response.status === 401) {
+                    window.location.href = '/login';
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+            return false;
+        }
+        
+        // Load chat history
+        async function loadChatHistory() {
+            try {
+                const response = await fetch('/api/chat/messages');
+                if (response.ok) {
+                    const history = await response.json();
+                    const container = document.getElementById('chatMessages');
+                    
+                    // Clear welcome message if there's history
+                    if (history.length > 0) {
+                        container.innerHTML = '';
+                    }
+                    
+                    history.forEach(msg => {
+                        addMessageToUI(msg.message, msg.senderEmail === userEmail, new Date(msg.timestamp), false);
+                    });
+                    
+                    return history;
+                }
+            } catch (error) {
+                console.error('Error loading chat history:', error);
+            }
+            return [];
+        }
+        
+        // Add message to UI
+        function addMessageToUI(text, isUser, timestamp, saveToStorage = true) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'support'}`;
+            const timeStr = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            div.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas ${isUser ? 'fa-user' : 'fa-headset'}"></i>
+                </div>
+                <div class="message-bubble">
+                    <div class="message-text">${escapeHtml(text)}</div>
+                    <span class="message-time">${timeStr}</span>
+                </div>
+            `;
+            
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            
+            if (saveToStorage) {
+                messages.push({ text, isUser, timestamp });
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Send message
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            addMessageToUI(message, true, new Date(), true);
+            input.value = '';
+            
+            try {
+                const response = await fetch('/api/chat/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                if (response.ok) {
+                    // Message sent successfully
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        }
+        
+        // Check for new messages
+        async function checkNewMessages() {
+            try {
+                const response = await fetch('/api/chat/messages');
+                if (response.ok) {
+                    const history = await response.json();
+                    if (history.length > messages.length) {
+                        const newMessages = history.slice(messages.length);
+                        newMessages.forEach(msg => {
+                            if (msg.senderEmail !== userEmail) {
+                                addMessageToUI(msg.message, false, new Date(msg.timestamp), true);
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking messages:', error);
+            }
+        }
+        
+        // Copy topic to clipboard
+        function copyTopic() {
+            navigator.clipboard.writeText(userTopic).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            });
+        }
+        
+        // Logout
+        async function logout() {
+            try {
+                await fetch('/logout', { method: 'POST' });
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = '/login';
+            }
+        }
+        
+        // Initialize chat
+        async function init() {
+            const loaded = await loadUserData();
+            if (!loaded) return;
+            
+            await loadChatHistory();
+            
+            // Setup event listeners
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            document.getElementById('logoutBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+            
+            // Start polling for new messages every 3 seconds
+            messageCheckInterval = setInterval(checkNewMessages, 3000);
+            
+            console.log('💬 Chat initialized');
+            console.log(`🔒 Your private ntfy topic: ${userTopic}`);
+            console.log(`📱 Receive notifications at: https://ntfy.sh/${userTopic}`);
+        }
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (messageCheckInterval) {
+                clearInterval(messageCheckInterval);
+            }
+        });
+        
+        init();
+    </script>
+</body>
+</html>
